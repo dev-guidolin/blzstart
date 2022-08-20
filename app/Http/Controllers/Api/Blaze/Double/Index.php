@@ -43,6 +43,11 @@ class Index extends Controller
         $coresStringUltimosCem = array_map($cores, $resultados);
         $coresStringUltimosCem = implode($coresStringUltimosCem);
 
+
+        $seq = DoubleSequence::get();
+
+        dd($seq);
+
         $sequencia = DoubleSequence::with('user:id,telegram_id,name')
             ->with('chat')
             ->whereHas('user',function ($q){

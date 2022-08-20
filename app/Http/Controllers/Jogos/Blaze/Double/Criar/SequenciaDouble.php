@@ -37,8 +37,9 @@ class SequenciaDouble extends Controller
             ]);
         endif;
 
-        $existeChat = Chats::find($user->telegram_id);
-        if($existeChat):
+        $existeChat = Chats::where('user_id',$user->id)->first();
+
+        if(!$existeChat):
             return response()->json([
                 'success' => false,
                 'message' => 'Você precisa cadastrar um grupo para receber os sinais.'
@@ -47,7 +48,7 @@ class SequenciaDouble extends Controller
 
         $dataToSave = [
             'user_id' => Auth::id(),
-            'chat_id' => $user->telegram_id,
+            'chat_id' => $existeChat->id,
             'sequencia' => $request->seq,
             'titulo' => $request->titulo,
             'descricao' => $request->descricao ?? null,
@@ -55,6 +56,8 @@ class SequenciaDouble extends Controller
             'entrada' => $request->entrada,
             'acertos' => 0
         ];
+
+        //dd($dataToSave);
 
         try {
             DoubleSequence::create($dataToSave);
