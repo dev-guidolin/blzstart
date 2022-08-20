@@ -14,15 +14,20 @@ class SequenceDoubleTable extends Migration
     public function up()
     {
         Schema::create('sequence_doubles', function (Blueprint $table) {
+            $table->id();
+
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('chat_id');
-            $table->foreign('chat_id')->references('chat_id')->on('chats');
+
+            $table->unsignedBigInteger('chat_id');
+            $table->foreign('chat_id')->references('id')->on('chats');
+
             $table->text('sequencia');
             $table->string('titulo')->nullable()->default(null);
             $table->text('descricao')->nullable()->default(null);
             $table->integer('lenght')->unsigned();
             $table->string('entrada');
+
             $table->unsignedBigInteger('acertos');
             $table->softDeletes();
             $table->timestamps();

@@ -54,7 +54,6 @@ class BotAdicionado extends Controller
             'total_membros' => $this->methods->contarMembrosDoGrupo($chat_id)->result,
             'is_admin' => 0
         ];
-        //dd($data,$existeUser->id);
 
         try {
             Chats::create($data);

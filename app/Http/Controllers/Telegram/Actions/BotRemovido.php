@@ -19,7 +19,6 @@ class BotRemovido extends Controller
     {
         $grupo = Chats::where('chat_id',$request['my_chat_member']['chat']['id'])->first();
 
-
         if($grupo):
             try {
                 Chats::where('chat_id',$request['my_chat_member']['chat']['id'])->delete();
