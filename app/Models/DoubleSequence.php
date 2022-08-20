@@ -13,7 +13,16 @@ class DoubleSequence extends Model
 {
     use HasFactory, SoftDeletes, Timestamp;
     protected $table = "sequence_doubles";
-    protected $fillable = ['user_id','game_id','chat_id','sequencia','titulo','descricao','lenght','entrada','acertos'];
+    protected $fillable = [
+        'user_id',
+        'chat_id',
+        'sequencia',
+        'titulo',
+        'descricao',
+        'lenght',
+        'entrada',
+        'acertos'
+    ];
 
     public $timestamps = true;
 
@@ -22,7 +31,7 @@ class DoubleSequence extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function chat(): HasMany
+    public function chats(): HasMany
     {
         return $this->hasMany(Chats::class);
     }

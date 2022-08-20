@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('status');
             $table->string('level');
-            $table->string('telegram_id')->nullable()->default(null);
+            $table->string('telegram_id')->nullable()->default(null)->index();
             $table->string('whatsapp_id')->nullable()->default(null);
             $table->string('whatsapp_token');
             $table->string('telegram_token');

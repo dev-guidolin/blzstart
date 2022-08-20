@@ -2,7 +2,10 @@
 
 function mensalidadeEmDia($dataMensalidade)
 {
-    if( \Carbon\Carbon::parse($dataMensalidade)->diffInDays() < 30):
+    $dataPagamento = \Carbon\Carbon::parse($dataMensalidade);
+    $dataAgora = \Carbon\Carbon::now();
+
+    if( $dataAgora->diffInDays($dataPagamento) < 30):
         return true;
     else:
         return false;

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Jogos\Blaze\Double\Criar;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chats;
 use App\Models\DoubleSequence;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +19,15 @@ class SequenciaDouble extends Controller
     public function index(Request $request)
     {
 
+        $user = User::find(Auth::id());
+        $mensalidadeStatus = mensalidadeEmDia($user->mensalidade);
+        if(!$mensalidadeStatus):
+            return response()->json([
+                'success' => false,
+                'message' => "Sua mensalidade está em aberto."
+            ]);
+        endif;
+
         $existeSequencia = DoubleSequence::where('user_id',Auth::id())->where('sequencia',$request->seq)->where('entrada',$request->entrada)->first();
 
         if ($existeSequencia):
@@ -26,10 +37,17 @@ class SequenciaDouble extends Controller
             ]);
         endif;
 
+        $existeChat = Chats::find($user->telegram_id);
+        if($existeChat):
+            return response()->json([
+                'success' => false,
+                'message' => 'Você precisa cadastrar um grupo para receber os sinais.'
+            ]);
+        endif;
 
         $dataToSave = [
             'user_id' => Auth::id(),
-            'chat_id' => null,
+            'chat_id' => $user->telegram_id,
             'sequencia' => $request->seq,
             'titulo' => $request->titulo,
             'descricao' => $request->descricao ?? null,

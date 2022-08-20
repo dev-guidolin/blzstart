@@ -27,7 +27,7 @@ class NovoMembro extends Controller
                 'nome' => $participanteId['first_name'],
                 'user_name' => $participanteId['username']
             ]);
-            $this->methods->enviarMensagem('o usuário tal, entreou no grupo talb.',$participanteId['id'])
+            $this->methods->enviarMensagem('o usuário tal, entreou no grupo talb.',$participanteId['id']);
             return respose('membro salvo com sucesso',200);
         endif;
 

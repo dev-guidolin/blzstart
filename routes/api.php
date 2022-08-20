@@ -19,3 +19,5 @@ Route::middleware('api')->post('/telegram/webhook',function (Request $request){
     return $webHooks->index($request);
 
 });
+
+Route::middleware('api')->post('/blaze/double/resultado',[\App\Http\Controllers\Api\Blaze\Double\Index::class,"recebeResultado"]);

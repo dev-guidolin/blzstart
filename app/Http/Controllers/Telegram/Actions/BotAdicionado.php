@@ -31,9 +31,10 @@ class BotAdicionado extends Controller
             return response('cliente não encontrado',200);
         endif;
 
-        if(mensalidadeEmDia($existeUser->mensalidade)):
+        if(!mensalidadeEmDia($existeUser->mensalidade)):
             $mensagem = "Sua mensalidade está em aberto, para adicionar o nosso Bot aos seus grupos de sinais, efetue o pagamento.";
             $this->methods->enviarMensagem($mensagem,$existeUser->telegram_id);
+            $this->methods->sairDoGrupo($chat_id);
             return response('mensalidade em aberto',200);
         endif;
 
@@ -44,15 +45,19 @@ class BotAdicionado extends Controller
             return response('o bot deve estar como admin do grupo',200);
         endif;
 
+
+        $data = [
+            'chat_id' => "$chat_id",
+            'name' => $request['my_chat_member']['chat']['title'],
+            'chat_obs' => "",
+            'user_id' => $existeUser->id,
+            'total_membros' => $this->methods->contarMembrosDoGrupo($chat_id)->result,
+            'is_admin' => 0
+        ];
+        //dd($data,$existeUser->id);
+
         try {
-            Chats::create([
-                'chat_id' => $chat_id,
-                'name' => $request['my_chat_member']['chat']['title'],
-                'chat_obs' => "",
-                'user_id' => $dono_chat,
-                'total_membros' => $this->methods->contarMembrosDoGrupo($chat_id)->result,
-                'is_admin' => 0
-            ]);
+            Chats::create($data);
             $mensagem = "O Bot foi adicionado ao grupo seu grupo ".$request['my_chat_member']['chat']['title'];
             $this->methods->enviarMensagem($mensagem,$dono_chat);
             return  response('Chat criado com sucess',200);
