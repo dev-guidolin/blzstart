@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Chats;
 use App\Models\DoubleSequence;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,8 +25,13 @@ class SequenciaDouble extends Controller
         if(!$mensalidadeStatus):
             return response()->json([
                 'success' => false,
-                'message' => "Sua mensalidade está em aberto."
+                'message' => "Sua mensalidade está atrasada."
             ]);
+        endif;
+
+        $validarDados = $this->validarDadosInput($request->all());
+        if (!$validarDados['success']):
+            return response()->json($validarDados);
         endif;
 
         $existeSequencia = DoubleSequence::where('user_id',Auth::id())->where('sequencia',$request->seq)->where('entrada',$request->entrada)->first();
@@ -37,30 +43,22 @@ class SequenciaDouble extends Controller
             ]);
         endif;
 
-        $existeChat = Chats::where('user_id',$user->id)->first();
-
-        if(!$existeChat):
-            return response()->json([
-                'success' => false,
-                'message' => 'Você precisa cadastrar um grupo para receber os sinais.'
-            ]);
-        endif;
-
-        $dataToSave = [
-            'user_id' => Auth::id(),
-            'chat_id' => $existeChat->id,
-            'sequencia' => $request->seq,
-            'titulo' => $request->titulo,
-            'descricao' => $request->descricao ?? null,
-            'lenght' => strlen($request->seq),
-            'entrada' => $request->entrada,
-            'acertos' => 0
-        ];
-
-        //dd($dataToSave);
-
         try {
-            DoubleSequence::create($dataToSave);
+
+            foreach($request->chats as $chat):
+                $dataToSave = [
+                    'user_id' => Auth::id(),
+                    'chat_id' => $chat,
+                    'sequencia' => $request->seq,
+                    'titulo' => $request->titulo,
+                    'chat_obs' => $request->descricao ?? null,
+                    'lenght' => strlen($request->seq),
+                    'entrada' => $request->entrada,
+                    'acertos' => 0
+                ];
+                DoubleSequence::create($dataToSave);
+            endforeach;
+
             return response()->json([
                 'success' => true,
                 'message' => "Sequencia criada com sucesso."
@@ -72,5 +70,22 @@ class SequenciaDouble extends Controller
             ]);
         }
 
+    }
+
+    private function validarDadosInput(array $dados): array
+    {
+        if(!isset($dados['seq']) or strlen($dados['seq']) < 1):
+            return [
+                'success' => false,
+                'message' => 'Você deve montar umar sequência.'
+            ];
+        elseif(!isset($dados['chats']) or empty($dados['chats'])):
+            return [
+                'success' => false,
+                'message' => 'Você deve escolher pelo menos um grupo de alerta.'
+            ];
+        endif;
+
+        return ['success' => true];
     }
 }

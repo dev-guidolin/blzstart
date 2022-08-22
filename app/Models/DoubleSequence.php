@@ -6,7 +6,6 @@ use Carbon\Traits\Timestamp;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DoubleSequence extends Model
@@ -31,8 +30,5 @@ class DoubleSequence extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function chats(): HasMany
-    {
-        return $this->hasMany(Chats::class);
-    }
+
 }

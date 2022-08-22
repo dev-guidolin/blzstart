@@ -19,10 +19,12 @@ class BotAdicionado extends Controller
     public function index($request)
     {
 
+
         $dono_chat = $request['my_chat_member']['from']['id'];
         $chat_id = $request['my_chat_member']['chat']['id'];
 
         $existeUser = User::where('telegram_id',$dono_chat)->first();
+
 
         if(!$existeUser):
             $this->methods->sairDoGrupo($chat_id);
@@ -38,10 +40,17 @@ class BotAdicionado extends Controller
             return response('mensalidade em aberto',200);
         endif;
 
+        $existeChat = Chats::where('chat_id',"$chat_id")->first();
+        if($existeChat):
+            $mensagem = "O Bot foi adicionado por  ".$request['my_chat_member']['from']['username']." no grupo ".$request['my_chat_member']['chat']['title'].", porém o bot já está ativo para este grupo.";
+            $this->methods->enviarMensagem($mensagem,$existeUser->telegram_id);
+            return response($mensagem, 200);
+        endif;
+
         $is_admin = $this->methods->infoDoBrupo($chat_id);
         if(!$is_admin):
             $mensagem = "O Bot deverá estar como Admin do grupo para enviar os sinais.";
-            $this->methods->enviarMensagem($mensagem,$chat_id);
+            $this->methods->enviarMensagem($mensagem,$existeUser->telegram_id);
             return response('o bot deve estar como admin do grupo',200);
         endif;
 

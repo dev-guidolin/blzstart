@@ -241,7 +241,7 @@ return [
             'type' => 'sidebar-menu-search',
             'text' => 'pesquisar',
         ],
-        [
+        /*[
             'text' => 'blog',
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
@@ -252,17 +252,21 @@ return [
             'icon'        => 'far fa-fw fa-file',
             'label'       => 4,
             'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
+        ],*/
+        ['header' => 'JOGOS'],
         [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Blaze',
+            'icon' => 'fas fa-money',
+            'submenu' => [
+                [
+                    'text' => 'Double',
+                    'route'  => 'double.criar',
+                ],
+                [
+                'text' => 'Sequencias',
+                'route'  => 'double.sequencias',
+                ]
+            ]
         ],
     ],
 
@@ -322,7 +326,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -347,7 +351,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
