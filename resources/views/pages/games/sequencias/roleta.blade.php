@@ -70,7 +70,7 @@
                 <h6>Escolhas os grupos para esta sequência</h6>
                 <select class="form-control select2" id="chats" name="chats[]"  multiple="multiple">
                     @foreach($chats as $chat)
-                        <option value="{{ $chat['id'] }}">{{ $chat['name'] }}</option>
+                        <option value="{{ $chat['chat_id'] }}">{{ $chat['name'] }}</option>
                     @endforeach
                 </select>
             </div>

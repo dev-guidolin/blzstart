@@ -51,7 +51,7 @@ class SequenciaDouble extends Controller
                     'chat_id' => $chat,
                     'sequencia' => $request->seq,
                     'titulo' => $request->titulo,
-                    'chat_obs' => $request->descricao ?? null,
+                    'chat_descricao' => $request->descricao ?? null,
                     'lenght' => strlen($request->seq),
                     'entrada' => $request->entrada,
                     'acertos' => 0
