@@ -26,7 +26,10 @@ Route::get('/blaze/double/sequencias',[\App\Http\Controllers\Pages\Games\Roleta:
 
 Route::post('/ajax/criar-sequencia',[\App\Http\Controllers\Jogos\Blaze\Double\Criar\SequenciaDouble::class,'index'])->name('sequencia.criar');
 
-
+Route::get('teste',function (){
+ $telegram = new App\Http\Controllers\Telegram\Methods();
+ $telegram->enviarMensagem();
+});
 // WebHook Telegram
 
 
