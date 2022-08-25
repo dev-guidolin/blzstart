@@ -51,9 +51,8 @@ class SequenciaDouble extends Controller
                     'chat_id' => $chat,
                     'sequencia' => $request->seq,
                     'titulo' => $request->titulo,
-                    'chat_descricao' => $request->descricao ?? null,
-                    'lenght' => strlen($request->seq),
-                    'entrada' => $request->entrada,
+                    'descricao' => $request->descricao ?? null,
+                    'entrada' => $request->seq.$request->entrada,
                     'acertos' => 0
                 ];
                 DoubleSequence::create($dataToSave);

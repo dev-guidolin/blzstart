@@ -18,7 +18,6 @@ class DoubleSequence extends Model
         'sequencia',
         'titulo',
         'descricao',
-        'lenght',
         'entrada',
         'acertos'
     ];

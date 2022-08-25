@@ -22,7 +22,6 @@ class SequenceDoubleTable extends Migration
             $table->text('sequencia');
             $table->string('titulo')->nullable()->default(null);
             $table->text('descricao')->nullable()->default(null);
-            $table->integer('lenght')->unsigned();
             $table->string('entrada');
 
             $table->unsignedBigInteger('acertos');

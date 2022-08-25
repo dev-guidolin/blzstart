@@ -7,12 +7,21 @@ use App\Http\Controllers\Telegram\Methods;
 use App\Models\Double;
 use App\Models\DoubleSequence;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Monolog\Handler\TelegramBotHandler;
 
 class Index extends Controller
 {
+    protected $telegram;
+
+    public function __construct()
+    {
+        $this->telegram = new Methods();
+    }
+
     public function recebeResultado(Request $request)
     {
 
@@ -61,43 +70,79 @@ class Index extends Controller
 
 
         $resultadoArray =[];
+        $idsAcertos =[];
+        $ArrayAcertos = [];
         foreach ($sequencias as $string):
 
             $resultadoPartida = substr($coresStringUltimosCem,0,strlen($string['sequencia']));
+            $resultadoPartidaAcerto = substr($coresStringUltimosCem,0,strlen($string['sequencia'])+1);
+
+            if ($resultadoPartidaAcerto === $string['entrada']):
+                $idsAcertos[] = $string['id'];
+                $ArrayAcertos[] = $string;
+            endif;
 
             if ($resultadoPartida === $string['sequencia']):
                 $resultadoArray[] = $string;
             endif;
 
         endforeach;
-        //dd($resultadoArray);
 
-        $telegram = new Methods();
-        foreach($resultadoArray as $sucess):
-            $mensagem = view('telegram.success',[
-                'titulo' => $sucess['titulo'],
-                'sequencia' => $sucess['sequencia'],
-                'descricao' => $sucess['descricao'],
-                'entrada' => $sucess['entrada'],
-            ])->render();
+        DoubleSequence::whereIn('id',$idsAcertos)->increment('acertos',1);
 
-            $string =
-                "<b>🎲 Double - Blaze </b> ".PHP_EOL.
-                "<b>💥 ".strtoupper($sucess['titulo'])." 💥</b> ".PHP_EOL.
-                "<b>🗯️ ".$sucess['descricao']."</b>".PHP_EOL.PHP_EOL.
+        if (!empty($resultadoArray)):
+            $this->alertaAposta($resultadoArray);
+        endif;
 
-                "<b>✅ SPOSTAR EM ✅</b>".PHP_EOL.
-                "<b>👉 ".toEmoji($sucess['entrada'])." 👈</b>".PHP_EOL.PHP_EOL.
 
-                '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
-                '🥉 Suporte @turista';
-            
-                $telegram->enviarMensagemDeAlertaSucesso($string,$sucess['chat_id']);
-        endforeach;
+        if (!empty($ArrayAcertos)):
+            $this->alertaSucessoAcerto($ArrayAcertos);
+        endif;
 
         return response()->json([
             'success' => true,
             'message' => 'Mensagens eviadas com sucesso.'
         ]);
+    }
+    protected function alertaAposta($resultadoArray)
+    {
+        foreach($resultadoArray as $sucess):
+
+            $description = strlen($sucess['descricao']) > 1 ? "<b>🗯️ ".$sucess['descricao']."</b>".PHP_EOL.PHP_EOL : "";
+            $string =
+                "<b>🎲 Double - Blaze </b> ".PHP_EOL.
+                "<b>💥 ".strtoupper($sucess['titulo'])." 💥</b> ".PHP_EOL.
+
+                $description.
+
+                "<b>✅ APOSTAR EM ✅</b>".PHP_EOL.
+                "<b>👉 ".toEmoji(substr($sucess['entrada'],0,1))." 👈</b>".PHP_EOL.PHP_EOL.
+
+                '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
+                '🥉 Suporte @turista';
+
+            $this->telegram->enviarMensagemDeAlertaSucesso($string,$sucess['chat_id']);
+        endforeach;
+
+        return true;
+
+    }
+    protected function alertaSucessoAcerto($resultadoArrayAcerto)
+    {
+        foreach($resultadoArrayAcerto as $sucess):
+
+            $string =
+                "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
+                "<b>✅ APOSTA CERTEIRA ✅</b>".PHP_EOL.PHP_EOL.
+                "<b> 🕐 ".\Carbon\Carbon::parse($sucess['created_at'])->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
+                "<b> Entrada: ".toEmoji(substr($sucess['entrada'],0,1))."</b>".PHP_EOL.PHP_EOL.
+
+                '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
+                '🥉 Suporte @turista';
+
+            $this->telegram->enviarMensagemDeAlertaSucesso($string,$sucess['chat_id']);
+        endforeach;
+        return true;
+
     }
 }
