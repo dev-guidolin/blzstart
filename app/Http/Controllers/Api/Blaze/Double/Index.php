@@ -7,11 +7,8 @@ use App\Http\Controllers\Telegram\Methods;
 use App\Models\Double;
 use App\Models\DoubleSequence;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Monolog\Handler\TelegramBotHandler;
 
 class Index extends Controller
 {
@@ -25,7 +22,6 @@ class Index extends Controller
     public function recebeResultado(Request $request)
     {
 
-
         $records = $request->input('records') ?? false;
 
         if(!$records):
@@ -37,8 +33,7 @@ class Index extends Controller
 
         $existe_resultado = Double::find($lastRecord['id']);
 
-
-        /*if($existe_resultado):
+        if($existe_resultado):
             Double::create([
                 //'id' =>  $lastRecord['id'],
                 'id' =>  Str::random(10),
@@ -47,11 +42,9 @@ class Index extends Controller
                 'roll' => $lastRecord['roll'],
                 'server_seed' => $lastRecord['server_seed'],
             ]);
-        endif;*/
-
+        endif;
 
         $resultados = Double::orderBy('created_at','desc')->select('color')->take(100)->get()->toArray();
-
 
         $cores = function ($data) {
             return $data['color'];
@@ -67,7 +60,6 @@ class Index extends Controller
                     ->where('telegram_id','<>',null);
             })
             ->get()->toArray();
-
 
         $resultadoArray =[];
         $idsAcertos =[];
@@ -88,21 +80,28 @@ class Index extends Controller
 
         endforeach;
 
-        DoubleSequence::whereIn('id',$idsAcertos)->increment('acertos',1);
+        try {
+            DoubleSequence::whereIn('id',$idsAcertos)->increment('acertos',1);
+            if (!empty($resultadoArray)):
+                $this->alertaAposta($resultadoArray);
+            endif;
 
-        if (!empty($resultadoArray)):
-            $this->alertaAposta($resultadoArray);
-        endif;
+            if (!empty($ArrayAcertos)):
+                $this->alertaSucessoAcerto($ArrayAcertos);
+            endif;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Mensagens eviadas com sucesso.'
+            ]);
+        }catch (\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro no processo de enviar mensagens ao Telegram.'
+            ]);
+        }
 
 
-        if (!empty($ArrayAcertos)):
-            $this->alertaSucessoAcerto($ArrayAcertos);
-        endif;
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Mensagens eviadas com sucesso.'
-        ]);
     }
     protected function alertaAposta($resultadoArray)
     {
