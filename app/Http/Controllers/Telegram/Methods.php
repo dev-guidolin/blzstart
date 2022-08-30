@@ -17,17 +17,12 @@ class Methods extends Controller
     }
     public function enviarMensagem($mensagem,$chatId)
     {
-        $url = "https://api.telegram.org/".env("BOT_TOKEN")."/sendMessage?chat_id=$chatId&text=$mensagem";
-        $request = Http::get($url);
-        return $request->body();
-    }
-    public function enviarMensagemDeAlertaSucesso($mensagem,$chatId)
-    {
         $url = "https://api.telegram.org/".env("BOT_TOKEN")."/sendMessage?chat_id=$chatId&parse_mode=html&text=$mensagem";
 
         $request = Http::get($url);
         return $request->body();
     }
+
     public function contarMembrosDoGrupo($chatId)
     {
         $url = "https://api.telegram.org/".env("BOT_TOKEN")."/getChatMembersCount?chat_id=$chatId";

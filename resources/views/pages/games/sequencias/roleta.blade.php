@@ -53,9 +53,9 @@
             <div class="col-12 col-md-6 mt-3">
                 <h6>Entrada</h6>
                 <select class="form-control" id="entrada">
-                    <option value="0" selected>🔴</option>
-                    <option value="1">⚫</option>
-                    <option value="2">⚪</option>
+                    <option value="0">⚪</option>
+                    <option value="1" selected>🔴</option>
+                    <option value="2">⚫</option>
                 </select>
             </div>
             <div class="col-md-6 col-12  mt-3">
@@ -121,9 +121,9 @@
 
                 let seq = $("#sequencia")
                     .text()
-                    .replaceAll('🔴',0)
-                    .replaceAll('⚫',1)
-                    .replaceAll('⚪',2)
+                    .replaceAll('🔴',1)
+                    .replaceAll('⚫',2)
+                    .replaceAll('⚪',0)
                 let titulo = $("#titulo").val()
                 let entrada = $('#entrada').val()
                 let descript = $("#descricao").val()

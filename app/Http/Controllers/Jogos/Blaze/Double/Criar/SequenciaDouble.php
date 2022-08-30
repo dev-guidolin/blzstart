@@ -53,7 +53,9 @@ class SequenciaDouble extends Controller
                     'titulo' => $request->titulo,
                     'descricao' => $request->descricao ?? null,
                     'entrada' => $request->seq.$request->entrada,
-                    'acertos' => 0
+                    'acertos' => 0,
+                    'alerted' => 0,
+                    'alerted_at' => null,
                 ];
                 DoubleSequence::create($dataToSave);
             endforeach;

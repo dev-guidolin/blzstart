@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\Blaze\Double;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Telegram\Methods;
+use App\Jobs\EnviarAlertaTelegram;
 use App\Models\Double;
 use App\Models\DoubleSequence;
+use DivisionByZeroError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Psy\Exception\ErrorException;
 
 class Index extends Controller
 {
@@ -34,21 +37,37 @@ class Index extends Controller
         $existe_resultado = Double::find($lastRecord['id']);
 
         if($existe_resultado):
+            return  response()->json([
+                'success' => false,
+                'message' => "Resultado já está computado no banco de dados."
+            ],200);
+        endif;
+
+
+        if(!$existe_resultado):
             Double::create([
-                //'id' =>  $lastRecord['id'],
-                'id' =>  Str::random(10),
-                'color' => rand(0,2),
-                //'color' => $lastRecord['color'],
+                'id' =>  $lastRecord['id'],
+                'color' => $lastRecord['color'],
                 'roll' => $lastRecord['roll'],
                 'server_seed' => $lastRecord['server_seed'],
             ]);
         endif;
 
-        $resultados = Double::orderBy('created_at','desc')->select('color')->take(100)->get()->toArray();
+        // Busca todos os 100 utimos resultados do banco ( já contando com a entrada atual )
+
+        $resultadosCount = Double::get()->count();
+
+        if($resultadosCount >= 150):
+            Double::oldest()->take(50)->forceDelete();
+        endif;
+
+        $resultados = Double::orderBy('created_at','asc')->select('color')->get()->toArray();
+
 
         $cores = function ($data) {
             return $data['color'];
         };
+
         $coresStringUltimosCem = array_map($cores, $resultados);
         $coresStringUltimosCem = implode($coresStringUltimosCem);
 
@@ -61,39 +80,73 @@ class Index extends Controller
             })
             ->get()->toArray();
 
-        $resultadoArray =[];
-        $idsAcertos =[];
-        $ArrayAcertos = [];
-        foreach ($sequencias as $string):
-
-            $resultadoPartida = substr($coresStringUltimosCem,0,strlen($string['sequencia']));
-            $resultadoPartidaAcerto = substr($coresStringUltimosCem,0,strlen($string['sequencia'])+1);
-
-            if ($resultadoPartidaAcerto === $string['entrada']):
-                $idsAcertos[] = $string['id'];
-                $ArrayAcertos[] = $string;
-            endif;
-
-            if ($resultadoPartida === $string['sequencia']):
-                $resultadoArray[] = $string;
-            endif;
-
-        endforeach;
-
         try {
-            DoubleSequence::whereIn('id',$idsAcertos)->increment('acertos',1);
-            if (!empty($resultadoArray)):
-                $this->alertaAposta($resultadoArray);
-            endif;
+            foreach ($sequencias as $string):
 
-            if (!empty($ArrayAcertos)):
-                $this->alertaSucessoAcerto($ArrayAcertos);
-            endif;
+                $totalCaracteresResultadoPartida = strlen($string['sequencia']);
+                $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
+
+                // Envia mensagem com o sinal
+                $up = [
+                    'aguardar' => DB::raw('aguardar + 1'),
+                ];
+
+
+                DoubleSequence::where('id',$string['id'])->update($up);
+
+                if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida ):
+
+                    $mensagem = $this->alertaDeEntrada($string);
+                    $this->telegram->enviarMensagem($mensagem,$string['chat_id']);
+
+                    $up = [
+                        'alerted' => 1,
+                        'alerted_at' => now()->toDate(),
+                        'aguardar' => DB::raw('aguardar + 1'),
+                    ];
+                    DoubleSequence::where('id',$string['id'])->update($up);
+                else:
+                    $totalCaracteresResultadoAcertos = strlen($string['entrada']);
+                    $resultadoPartidaAcerto = substr($coresStringUltimosCem, -$totalCaracteresResultadoAcertos);
+
+                    // Envia mensagem de sucesso
+                    if ($resultadoPartidaAcerto == $string['entrada'] and $string['alerted'] ):
+
+                        $up = [
+                            'alerted' => 0,
+                            'alerted_at' => now()->toDate(),
+                            'acertos' =>  DB::raw('acertos + 1'),
+                            'aguardar' =>  0
+                        ];
+                        DoubleSequence::where('id',$string['id'])->update($up);
+
+                        $mensagem = $this->apostaCerta($string);
+                        $this->filaEnviarMensagem($mensagem,$string['chat_id']);
+
+                    endif;
+
+                    if($resultadoPartidaAcerto != $string['entrada'] and $string['alerted'] ):
+
+                        $up = [
+                            'alerted' => 0,
+                            'alerted_at' => now()->toDate(),
+                            'erros' => DB::raw('acertos + 1'),
+                            'aguardar' =>  0
+                        ];
+                        DoubleSequence::where('id',$string['id'])->update($up);
+
+                        $mensagem = $this->apostaErrada($string);
+                        $this->filaEnviarMensagem($mensagem,$string['chat_id']);
+
+                    endif;
+                endif;
+
+            endforeach;
 
             return response()->json([
                 'success' => true,
-                'message' => 'Mensagens eviadas com sucesso.'
-            ]);
+                'message' => 'Tudo Certo.'
+            ],200);
         }catch (\Exception $e){
             return response()->json([
                 'success' => false,
@@ -103,45 +156,58 @@ class Index extends Controller
 
 
     }
-    protected function alertaAposta($resultadoArray)
+    protected function filaEnviarMensagem($mensagem,$chatId)
     {
-        foreach($resultadoArray as $sucess):
+        EnviarAlertaTelegram::dispatch($mensagem,$chatId);
+    }
+    protected function alertaDeEntrada($success)
+    {
 
-            $description = strlen($sucess['descricao']) > 1 ? "<b>🗯️ ".$sucess['descricao']."</b>".PHP_EOL.PHP_EOL : "";
-            $string =
-                "<b>🎲 Double - Blaze </b> ".PHP_EOL.
-                "<b>💥 ".strtoupper($sucess['titulo'])." 💥</b> ".PHP_EOL.
+        $description = strlen($success['descricao']) > 1 ? "<b>🗯️ ".$success['descricao']."</b>".PHP_EOL.PHP_EOL : "";
+        $string =
+            "<b>🎲 Double - Blaze </b> ".PHP_EOL.
+            "<b>💥 ".strtoupper($success['titulo'])." 💥</b> ".PHP_EOL.PHP_EOL.
 
-                $description.
+            $description.
 
-                "<b>✅ APOSTAR EM ✅</b>".PHP_EOL.
-                "<b>👉 ".toEmoji(substr($sucess['entrada'],0,1))." 👈</b>".PHP_EOL.PHP_EOL.
+            "<b>✅ PALPITE EM ✅</b>".PHP_EOL.PHP_EOL.
+            "<b>👉 ".toEmoji(substr($success['entrada'],-1))." 👈</b>".PHP_EOL.
+            "<b>Assertividade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
-                '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
-                '🥉 Suporte @turista';
+            '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
+            '🥉 Suporte @turista';
+        return $string;
+    }
+    protected function apostaCerta($success)
+    {
 
-            $this->telegram->enviarMensagemDeAlertaSucesso($string,$sucess['chat_id']);
-        endforeach;
 
-        return true;
+        $string = "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
+            "<b>✅ PALPITE CERTEIRO ✅</b>".PHP_EOL.PHP_EOL.
+            "<b>TOTAL ACERTOS: ".$success['acertos']."</b>".PHP_EOL.PHP_EOL.
+            "<b>🕐 ".Carbon::parse($success['alerted_at'])->setTimezone('America/Sao_paulo')->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
+            "<b>Entrada: ".toEmoji(substr($success['entrada'],-1))."</b>".PHP_EOL.
+            "<b>Assertividade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
+
+            '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
+            '🥉 Suporte @turista';
+
+        return $string;
 
     }
-    protected function alertaSucessoAcerto($resultadoArrayAcerto)
+    protected function apostaErrada($success)
     {
-        foreach($resultadoArrayAcerto as $sucess):
 
-            $string =
-                "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
-                "<b>✅ APOSTA CERTEIRA ✅</b>".PHP_EOL.PHP_EOL.
-                "<b> 🕐 ".\Carbon\Carbon::parse($sucess['created_at'])->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
-                "<b> Entrada: ".toEmoji(substr($sucess['entrada'],0,1))."</b>".PHP_EOL.PHP_EOL.
+        $string = "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
+            "<b>🔴 PALPITE INCORRETO 🔴</b>".PHP_EOL.PHP_EOL.
+            "<b>🕐 ".Carbon::parse($success['alerted_at'])->setTimezone('America/Sao_paulo')->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
+            "<b>Entrada: ".toEmoji(substr($success['entrada'],0,1))."</b>".PHP_EOL.
+            "<b>Assertivdade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
-                '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
-                '🥉 Suporte @turista';
+            '🤖 Bot criado em <a href="http://www.example.com/">telebet.com</a>'.PHP_EOL.
+            '🥉 Suporte @turista';
 
-            $this->telegram->enviarMensagemDeAlertaSucesso($string,$sucess['chat_id']);
-        endforeach;
-        return true;
+        return $string;
 
     }
 }

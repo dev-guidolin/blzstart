@@ -19,13 +19,15 @@ class HomeController extends Controller
 
     public function index() : Renderable
     {
+
+        // Aqui renderiza pagina inicial do admin
+
         $userId = Auth::user()->getAuthIdentifier();
 
-        $user = User::find($userId)
+        $user = User::whereId($userId)
             ->with('doubleSequence')
             ->with('chats')
             ->first();
-
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
             return $acerto += $coluna->acertos;
@@ -40,6 +42,6 @@ class HomeController extends Controller
             'totalAcertos' => $totalAcertos,
             'sequencias' => count($user->doubleSequence)
         ];
-        return view('welcome',$data);
+        return view('home_admin',$data);
     }
 }

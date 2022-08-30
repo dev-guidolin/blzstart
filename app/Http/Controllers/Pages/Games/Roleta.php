@@ -22,4 +22,9 @@ class Roleta extends Controller
         return view('pages.games.sequencias.roleta',['chats' => $chats]);
 
     }
+
+    public function sequencias()
+    {
+
+    }
 }

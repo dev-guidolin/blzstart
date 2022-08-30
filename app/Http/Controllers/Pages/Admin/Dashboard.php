@@ -12,6 +12,8 @@ class Dashboard extends Controller
 {
     public function start()
     {
+
+
         $userId = Auth::user()->getAuthIdentifier();
 
         $user = User::find($userId)

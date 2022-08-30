@@ -19,7 +19,10 @@ class DoubleSequence extends Model
         'titulo',
         'descricao',
         'entrada',
-        'acertos'
+        'acertos',
+        'alerted',
+        'alerted_at',
+        'aguardar',
     ];
 
     public $timestamps = true;
