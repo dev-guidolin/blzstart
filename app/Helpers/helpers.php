@@ -1,5 +1,7 @@
 <?php
 
+use Psy\Exception\ErrorException;
+
 function mensalidadeEmDia($dataMensalidade)
 {
     $dataPagamento = \Carbon\Carbon::parse($dataMensalidade);
@@ -10,4 +12,24 @@ function mensalidadeEmDia($dataMensalidade)
     else:
         return false;
     endif;
+}
+
+function toEmoji($string)
+{
+
+    $string = str_replace(2,"⚫",$string);
+    $string = str_replace(1,"🔴",$string);
+    return str_replace(0,"⚪",$string);
+
+}
+
+function percentualAcerto($success){
+
+    try {
+        return $success['acertos']/($success['acertos'] + $success['erros']) * 100;
+    }catch (DivisionByZeroError $e){
+        return 0;
+    }catch (ErrorException $e){
+        return 0;
+    }
 }

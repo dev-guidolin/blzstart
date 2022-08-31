@@ -25,7 +25,6 @@ class Roleta extends Controller
 
     public function sequencias()
     {
-        dd('hi');
 
     }
 }
