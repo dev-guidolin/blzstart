@@ -40,7 +40,7 @@
             <x-adminlte-small-box title="" text="Sequencia Double" theme="teal" url="{{route('double.criar')}}" url-text="Criar"/>
         </div>
         <div class="col-sm-6">
-
+            <div class="cho-container"></div>
         </div>
     </div>
 @stop
@@ -49,5 +49,20 @@
 @stop
 
 @section('js')
-    <script> console.log('Hi!'); </script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script>
+        const mp = new MercadoPago('TEST-3a9c7a06-05bb-452d-9e4f-414e9b340e27', {
+            locale: 'pt-BR'
+        });
+
+        mp.checkout({
+            preference: {
+                id: '{{$mp_id}}'
+            },
+            render: {
+                container: '.cho-container',
+                label: 'Pagar',
+            }
+        });
+    </script>
 @stop

@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"  />
-    <link href="{{ url(mix('pages/home/css/app.css')) }}" rel="stylesheet">
+    <link href="{{ mix('pages/home/css/app.css') }}" rel="stylesheet">
     <title>Document</title>
 
     <style>
@@ -233,7 +233,7 @@
     </div>
 </section>
 
-<script src="{{ url(mix('pages/home/js/app.js')) }}"></script>
+<script src="{{ mix('pages/home/js/app.js') }}"></script>
 <script>
 $(function (){
     $('.planos').click(function (){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\MercadoPago\Index;
 use App\Models\Chats;
 use App\Models\DoubleSequence;
 use App\Models\User;
@@ -28,6 +29,8 @@ class HomeController extends Controller
             ->with('doubleSequence')
             ->with('chats')
             ->first();
+        $mp = new Index();
+        $teste = $mp->mp();
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
             return $acerto += $coluna->acertos;
@@ -40,8 +43,10 @@ class HomeController extends Controller
             'telegram' => $user->telegram_token,
             'mensalidade' => $user->mensalidade,
             'totalAcertos' => $totalAcertos,
-            'sequencias' => count($user->doubleSequence)
+            'sequencias' => count($user->doubleSequence),
+            'mp_id' => $teste->id
         ];
+
         return view('home_admin',$data);
     }
 }
