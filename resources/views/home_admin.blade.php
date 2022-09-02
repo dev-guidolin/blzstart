@@ -50,8 +50,4 @@
 @stop
 
 @section('js')
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <script>
-
-    </script>
 @stop
