@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\MercadoPago;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cobranca;
+use App\Models\Planos;
 use Illuminate\Http\Request;
 use MercadoPago;
 
 class Index extends Controller
 {
-    public function mp()
+    public function mp($planoId)
     {
         MercadoPago\SDK::setAccessToken(env('MERCADO_PAGO_ACCESS_TOKEN'));
 
@@ -19,18 +21,15 @@ class Index extends Controller
                 ["id" => "ticket"]
             ],
         ];
-
-       /* $preference->back_urls = array(
-            "success" => route('mp.response.success'),
-            "failure" => route('mp.response.failure'),
-            "pending" => route('mp.response.pending')
-        );*/
+        $preference->auto_return = "approved";
 
         $preference->back_urls = array(
-            "success" => "https://f887-2804-d59-831c-5b00-70c9-37d3-5fc9-119a.sa.ngrok.io/mp/response/success",
-            "failure" => "https://f887-2804-d59-831c-5b00-70c9-37d3-5fc9-119a.sa.ngrok.io/mp/response/failure",
-            "pending" => "https://f887-2804-d59-831c-5b00-70c9-37d3-5fc9-119a.sa.ngrok.io/mp/response/pending",
+            "success" =>    route('mp.response.get'),
+            "failure" =>    route('mp.response.get'),
+            "pending" =>    route('mp.response.get'),
         );
+
+        $planos = Planos::find($planoId);
         // Params de retorno:
         // payment_id , status, external_reference, merchant_order_id
         // https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/checkout-customization/additional-configuration
@@ -41,6 +40,21 @@ class Index extends Controller
         $item->unit_price = 75.56;
         $preference->items = array($item);
         $preference->save();
+
+        try {
+            $array = [
+                'user_id' => auth()->id(),
+                'valor' => $planos->valor,
+                'plano' => $item->title,
+                'preference_id' => $preference->id,
+                'validade_plano' => $planos->validade
+            ];
+            Cobranca::create($array);
+        }catch (\Exception $e){
+            dd($e->getMessage());
+        }
+
+
 
         return $preference;
     }
