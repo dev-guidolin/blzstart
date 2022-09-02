@@ -30,7 +30,7 @@ class HomeController extends Controller
             ->with('chats')
             ->first();
         $mp = new Index();
-        $teste = $mp->mp();
+        $teste = $mp->mp(1);
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
             return $acerto += $coluna->acertos;
@@ -44,7 +44,8 @@ class HomeController extends Controller
             'mensalidade' => $user->mensalidade,
             'totalAcertos' => $totalAcertos,
             'sequencias' => count($user->doubleSequence),
-            'mp_id' => $teste->id
+            'mp_id' => $teste->id,
+            'mp_initPoint' => $teste->init_point
         ];
 
         return view('home_admin',$data);
