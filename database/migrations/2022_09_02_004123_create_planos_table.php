@@ -16,7 +16,7 @@ class CreatePlanosTable extends Migration
         Schema::create('planos', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
-            $table->timestamp('validade');
+            $table->unsignedBigInteger('validade');
             $table->decimal('valor',13,2);
             $table->softDeletes();
             $table->timestamps();

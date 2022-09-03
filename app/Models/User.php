@@ -53,7 +53,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
     public function doubleSequence() : HasMany
     {
         return $this->hasMany(DoubleSequence::class);
@@ -61,6 +60,10 @@ class User extends Authenticatable
     public function chats() : HasMany
     {
         return  $this->hasMany(Chats::class);
+    }
+    public function cobranca() : HasMany
+    {
+        return $this->hasMany(Cobranca::class);
     }
 
 }

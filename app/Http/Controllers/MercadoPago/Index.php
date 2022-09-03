@@ -47,7 +47,7 @@ class Index extends Controller
                 'valor' => $planos->valor,
                 'plano' => $item->title,
                 'preference_id' => $preference->id,
-                'validade_plano' => $planos->validade
+                'validade_plano' => now()->addDays($planos->validade)
             ];
             Cobranca::create($array);
         }catch (\Exception $e){
