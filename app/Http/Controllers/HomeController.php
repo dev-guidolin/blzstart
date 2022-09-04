@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\MercadoPago\Index;
+use App\Http\Controllers\MercadoPago\GerarLinkCobranca;
 use App\Models\Chats;
 use App\Models\DoubleSequence;
 use App\Models\User;
@@ -24,18 +24,18 @@ class HomeController extends Controller
         // Aqui renderiza pagina inicial do admin
 
         $userId = Auth::user()->getAuthIdentifier();
-
         $user = User::whereId($userId)
             ->with('doubleSequence')
             ->with('chats')
             ->first();
-        $mp = new Index();
-        $teste = $mp->mp(1);
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
             return $acerto += $coluna->acertos;
         },0);
 
+
+        $teste = new GerarLinkCobranca();
+        $link =  $teste->index(1);
 
         $data = [
             'user' => $user,
@@ -44,8 +44,8 @@ class HomeController extends Controller
             'mensalidade' => $user->mensalidade,
             'totalAcertos' => $totalAcertos,
             'sequencias' => count($user->doubleSequence),
-            'mp_id' => $teste->id,
-            'mp_initPoint' => $teste->init_point
+            'mp_id' => $link->id,
+            'mp_initPoint' => $link->init_point
         ];
 
         return view('home_admin',$data);

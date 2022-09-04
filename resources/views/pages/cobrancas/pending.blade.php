@@ -1,14 +1,32 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1>PENDENTE</h1>
+@extends('adminlte::page')
 
-</body>
-</html>
+@section('title', 'Dashboard')
+
+@section('content_header')
+    <h5>Pagamento pendente</h5>
+@stop
+
+@section('content')
+    <div class="row mt-5">
+        <div class="col-sm-4 mx-auto">
+            <x-adminlte-profile-widget name="Pagamento Pendente"  theme="warning" img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4ny_e9VwBLNxI51q8kZ4B-u5a-Wm6pD6m54hpwGxB1tVStyIIw9TaGztGZWavpuPduNg&usqp=CAU">
+                <x-adminlte-button label="Voltar para o painel adminitrativo" theme="warning" class="btn-block mt-3"  icon="fas fa-exclamation-triangle" title="Voltar para o painel administrativo"/>
+            </x-adminlte-profile-widget>
+        </div>
+    </div>
+@stop
+
+@section('css')
+@stop
+
+@section('js')
+    <script>
+        $(function(){
+            $(".btn-block").click(function (){
+                window.location.href = '/dashboard'
+            })
+        })
+
+    </script>
+
+@stop

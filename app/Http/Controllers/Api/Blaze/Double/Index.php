@@ -9,6 +9,7 @@ use App\Models\Double;
 use App\Models\DoubleSequence;
 use DivisionByZeroError;
 use Illuminate\Http\Request;
+use Illuminate\Queue\Queue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Psy\Exception\ErrorException;
@@ -28,7 +29,7 @@ class Index extends Controller
         $records = $request->input('records') ?? false;
 
         if(!$records):
-            return response('ok',200);
+            return response('ok sem reocors',200);
         endif;
 
         $lastRecord = reset($records);
@@ -53,7 +54,7 @@ class Index extends Controller
             ]);
         endif;
 
-        // Busca todos os 100 utimos resultados do banco ( já contando com a entrada atual )
+        // Busca todos os 100 utimos resultados do banco (já contando com a entrada atual)
 
         $resultadosCount = Double::get()->count();
 
@@ -81,7 +82,7 @@ class Index extends Controller
             ->get()->toArray();
 
         try {
-            foreach ($sequencias as $string):
+             foreach ($sequencias as $string):
 
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
                 $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
@@ -97,7 +98,8 @@ class Index extends Controller
                 if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida ):
 
                     $mensagem = $this->alertaDeEntrada($string);
-                    $this->telegram->enviarMensagem($mensagem,$string['chat_id']);
+                    $this->filaEnviarMensagem($mensagem,$string['chat_id']);
+
 
                     $up = [
                         'alerted' => 1,
