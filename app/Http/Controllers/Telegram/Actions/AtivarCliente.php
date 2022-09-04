@@ -23,15 +23,17 @@ class AtivarCliente extends Controller
         // Verifica se cliente já está cadastrado
         $cliente =  User::where('telegram_id',$chatId)->first();
 
+
         if ($cliente AND $cliente->telegram_id !=null):
             $this->methods->enviarMensagem("Oi {$request['message']['from']['username']}, sua conta já está cadastrada",$chatId);
             return response('Conta já cadastrada',200);
         endif;
 
         // Verifica se a mensagem é um token e pertence a algum cliente
-        $existeUser = User::where('telegram_token',$telegramToken)->first();
+        $existeUser = User::where('telegram_token',strtoupper($telegramToken))->first();
 
-        if( !$existeUser or strlen($existeUser->telegram_token) !== 4):
+
+        if( !$existeUser or strlen($existeUser->telegram_token) !== 4 ):
 
             $mensagem = "Por favor, digite o Token do Telegram composto por 4 Dígitos que se encontra em sua área administrativa.";
             $this->methods->enviarMensagem($mensagem,$chatId);
