@@ -45,20 +45,32 @@ class SequenciaDouble extends Controller
 
         try {
 
-            foreach($request->chats as $chat):
-                $dataToSave = [
-                    'user_id' => Auth::id(),
-                    'chat_id' => $chat,
-                    'sequencia' => $request->seq,
-                    'titulo' => $request->titulo,
-                    'descricao' => $request->descricao ?? null,
-                    'entrada' => $request->seq.$request->entrada,
-                    'acertos' => 0,
-                    'alerted' => 0,
-                    'alerted_at' => null,
-                ];
-                DoubleSequence::create($dataToSave);
+            $grupos ="";
+            $lastKey = array_key_last($request->chats);
+            foreach($request->chats as $index => $chat):
+
+                if($index == $lastKey):
+                    $grupos .= $chat;
+                else:
+                    $grupos .= "$chat;" ;
+                endif;
+
             endforeach;
+
+            $dataToSave = [
+                'user_id' => Auth::id(),
+                'chat_id' => $grupos,
+                'sequencia' => $request->seq,
+                'titulo' => $request->titulo,
+                'descricao' => $request->descricao ?? null,
+                'entrada' => $request->seq.$request->entrada,
+                'acertos' => 0,
+                'alerted' => 0,
+                'alerted_at' => null,
+            ];
+
+
+            DoubleSequence::create($dataToSave);
 
             return response()->json([
                 'success' => true,

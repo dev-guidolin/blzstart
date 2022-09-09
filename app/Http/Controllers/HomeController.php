@@ -34,8 +34,25 @@ class HomeController extends Controller
         },0);
 
 
-        $teste = new GerarLinkCobranca();
-        $link =  $teste->index(1);
+
+
+        $sequencias = [];
+        foreach ($user->doubleSequence as $seq):
+            $sequencias[$seq->id] = [
+                'data'=>$seq,
+                'grupos'=>Chats::whereIn('chat_id',explode(';',$seq->chat_id))
+                    ->select('name')
+                    ->get()
+                    ->map(function($name){  return $name->name;})
+            ];
+        endforeach;
+        //dd($sequencias);
+
+
+        //$teste = new GerarLinkCobranca();
+        //$link =  $teste->index(1);
+
+
 
         $data = [
             'user' => $user,
@@ -44,9 +61,13 @@ class HomeController extends Controller
             'mensalidade' => $user->mensalidade,
             'totalAcertos' => $totalAcertos,
             'sequencias' => count($user->doubleSequence),
-            'mp_id' => $link->id,
-            'mp_initPoint' => $link->init_point
+            'mp_id' => '',
+            'mp_initPoint' => '',
+            'sequencias' => $sequencias,
+
+
         ];
+
 
         return view('home_admin',$data);
     }

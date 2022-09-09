@@ -12,7 +12,7 @@ class Methods extends Controller
 
     public function __construct()
     {
-        $this->baseUrl = "https://api.telegram.org/bot".env("BOT_TOKEN");
+        $this->baseUrl = "https://api.telegram.org/bot".env("TELEGRAM_BOT_TOKEN");
     }
 
     public function sairDoGrupo($chat_id)

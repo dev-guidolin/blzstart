@@ -70,7 +70,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'status' => 'criado',
-            'mensalidade' => '1999-01-01',
+            'mensalidade' => now(),
             'level' => 'regular',
             'telegram_id' => null,
             'whatsapp_id' => null,
