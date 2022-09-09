@@ -26,7 +26,9 @@ class Index extends Controller
     public function recebeResultado(Request $request)
     {
 
+        
         $records = $request->input('records') ?? false;
+
 
         if(!$records):
             return response('ok sem reocors',200);
@@ -43,6 +45,7 @@ class Index extends Controller
                 'message' => "Resultado já está computado no banco de dados."
             ],200);
         endif;
+
 
 
         if(!$existe_resultado):
@@ -64,13 +67,13 @@ class Index extends Controller
 
         $resultados = Double::orderBy('created_at','asc')->select('color')->get()->toArray();
 
-
         $cores = function ($data) {
             return $data['color'];
         };
 
         $coresStringUltimosCem = array_map($cores, $resultados);
         $coresStringUltimosCem = implode($coresStringUltimosCem);
+
 
         $sequencias = DoubleSequence::with('user:id,telegram_id,name')
             ->whereHas('user',function ($q){
@@ -82,7 +85,9 @@ class Index extends Controller
             ->get()->toArray();
 
         try {
+
              foreach ($sequencias as $string):
+                
 
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
                 $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
@@ -92,11 +97,11 @@ class Index extends Controller
                     'aguardar' => DB::raw('aguardar + 1'),
                 ];
 
-
                 DoubleSequence::where('id',$string['id'])->update($up);
 
                 if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida ):
 
+                    dd($string);
                     $mensagem = $this->alertaDeEntrada($string);
                     $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
@@ -160,8 +165,13 @@ class Index extends Controller
     }
     protected function filaEnviarMensagem($mensagem,$chatId)
     {
-        EnviarAlertaTelegram::dispatch($mensagem,$chatId);
+        $chats = explode(';',$chatId);
+
+        foreach( $chats as $chat):
+            EnviarAlertaTelegram::dispatch($mensagem,trim($chat));
+        endforeach;
     }
+
     protected function alertaDeEntrada($success)
     {
 
