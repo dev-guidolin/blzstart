@@ -92,6 +92,7 @@ class Index extends Controller
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
                 $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
 
+
                 // Envia mensagem com o sinal
                 $up = [
                     'aguardar' => DB::raw('aguardar + 1'),
@@ -101,7 +102,7 @@ class Index extends Controller
 
                 if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida ):
 
-                    dd($string);
+                    
                     $mensagem = $this->alertaDeEntrada($string);
                     $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
