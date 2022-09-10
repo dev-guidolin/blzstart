@@ -93,7 +93,7 @@
                                 <span class="badge bg-{{$printAcertos['color']}}"> {{$percentual}}%</span>
                             </td>
                             <td class="text-center align-middle">
-                                <x-adminlte-button theme="outline-danger" icon="fas fa-lg fa-trash" data-id="{{ $seq['data']->id }}" title="Apagar sequência" class="action" data-location="delete"/>
+                                <x-adminlte-button theme="outline-danger" icon="fas fa-lg fa-trash" data-id="{{ $seq['data']->id }}" title="Apagar sequência" class="action pb-3" data-location="delete"/>
                                 <x-adminlte-button theme="outline-info" icon="fas fa-lg fa-edit" data-id="{{ $seq['data']->id }}" title="Editar sequência" class="action" data-location="edit"/>
                             </td>
                         </tr>
