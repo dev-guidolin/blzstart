@@ -12,7 +12,7 @@ class SetWebHooks extends Command
      *
      * @var string
      */
-    protected $signature = 'telegram:setwebhook';
+    protected $signature = 'telegram:hook';
 
     /**
      * The console command description.

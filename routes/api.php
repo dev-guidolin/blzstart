@@ -22,9 +22,6 @@ Route::middleware('api')->post('/telegram/webhook',function (Request $request){
 
 ////////////////////////// Pages Internas
 
-
-
-
 Route::middleware('api')->post('/blaze/double/resultado',[\App\Http\Controllers\Api\Blaze\Double\Index::class,"recebeResultado"]);
 /**
  * MERCADO PAGO

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Telegram\Actions;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Telegram\Methods;
+use App\Jobs\EnviarAlertaTelegram;
 use App\Models\Chats;
 use App\Models\DoubleSequence;
 use App\Models\User;
@@ -22,8 +23,6 @@ class BotRemovido extends Controller
         $chat_id = $request['my_chat_member']['chat']['id'];
         $chat = Chats::where('chat_id',$chat_id)->first();
 
-
-
         if($chat):
 
             $user = User::find($chat->user_id);
@@ -34,20 +33,22 @@ class BotRemovido extends Controller
                 foreach ($sequencias as $seq):
                     $xplode = explode(';',$seq->chat_id);
                     if (count($xplode) < 2):
-                        DoubleSequence::where('id',$seq->id)->update(['chat_id' => null]);
+                        DoubleSequence::where('id',$seq->id)->update([
+                            'chat_id'  =>null,
+                            'alerted'  => 0,
+                            'aguardar' =>0
+                        ]);
                     else:
                         $novosChats = implode(';',array_diff($xplode, array($chat_id)));
-                        DoubleSequence::where('id',$seq->id)->update(['chat_id' =>$novosChats]);
+                        DoubleSequence::where('id',$seq->id)->update(['chat_id' => $novosChats]);
                     endif;
                 endforeach;
 
-                Chats::where('id',$chat->id)->delete();
-
+                Chats::where('id',$chat->id)->forceDelete();
 
                 $mensagem = "O ".$request['my_chat_member']['from']['username'] . " removeu nosso BOT do grupo ".$request['my_chat_member']['chat']['title'].".";
 
-                $this->methods->enviarMensagem($mensagem,$request['my_chat_member']['from']['id']);
-
+                EnviarAlertaTelegram::dispatch($mensagem,$request['my_chat_member']['from']['id']);
 
                 return  response('chat removido',200);
             }catch (\Exception $e)

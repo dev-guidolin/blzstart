@@ -75,7 +75,7 @@
                             <td class="align-middle text-center">{{ toEmoji(substr($seq['data']->entrada,-1)) }}</td>
                             <td class="align-middle text-left">
                                 @foreach($seq['grupos'] as $grupo)
-                                    {{$grupo}} <br>
+                                    {{ empty($grupo)  }} <br>
                                 @endforeach
                             </td>
                             <td class="align-middle">

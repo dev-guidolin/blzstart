@@ -89,31 +89,30 @@ class Index extends Controller
 
 
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
-                $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
-
-                dd($resultadoPartida);
-
+                $resultadoRodada = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
 
                 // Envia mensagem com o sinal
-                $up = [
+                DoubleSequence::where('id',$string['id'])->update([
                     'aguardar' => DB::raw('aguardar + 1'),
-                ];
+                ]);
 
-                DoubleSequence::where('id',$string['id'])->update($up);
+                 //dd($string,$resultadoRodada);
 
-                if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida and $string['chat_id'] != null):
+                 // Resulstado da rodadate igual à sequencia do foreach
+                 // Ainda não recebeu alerta
+                 // Aguardar
+                 //if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida and $string['chat_id'] != null):
 
-                    dd($string);
+                 if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and  !$string['alerted']  and $string['chat_id'] != null and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida):
+
                     $mensagem = $this->alertaDeEntrada($string);
                     $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
-
-                    $up = [
+                    DoubleSequence::where('id',$string['id'])->update([
                         'alerted' => 1,
                         'alerted_at' => now()->toDate(),
                         'aguardar' => DB::raw('aguardar + 1'),
-                    ];
-                    DoubleSequence::where('id',$string['id'])->update($up);
+                    ]);
                 else:
                     $totalCaracteresResultadoAcertos = strlen($string['entrada']);
                     $resultadoPartidaAcerto = substr($coresStringUltimosCem, -$totalCaracteresResultadoAcertos);
@@ -121,13 +120,12 @@ class Index extends Controller
                     // Envia mensagem de sucesso
                     if ($resultadoPartidaAcerto == $string['entrada'] and $string['alerted'] ):
 
-                        $up = [
+                        DoubleSequence::where('id',$string['id'])->update([
                             'alerted' => 0,
                             'alerted_at' => now()->toDate(),
                             'acertos' =>  DB::raw('acertos + 1'),
                             'aguardar' =>  0
-                        ];
-                        DoubleSequence::where('id',$string['id'])->update($up);
+                        ]);
 
                         $mensagem = $this->apostaCerta($string);
                         $this->filaEnviarMensagem($mensagem,$string['chat_id']);
@@ -136,13 +134,12 @@ class Index extends Controller
 
                     if($resultadoPartidaAcerto != $string['entrada'] and $string['alerted'] ):
 
-                        $up = [
+                        DoubleSequence::where('id',$string['id'])->update([
                             'alerted' => 0,
                             'alerted_at' => now()->toDate(),
                             'erros' => DB::raw('acertos + 1'),
                             'aguardar' =>  0
-                        ];
-                        DoubleSequence::where('id',$string['id'])->update($up);
+                        ]);
 
                         $mensagem = $this->apostaErrada($string);
                         $this->filaEnviarMensagem($mensagem,$string['chat_id']);
