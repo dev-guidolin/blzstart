@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Actions\Sequencias;
+use App\Models\Chats;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,8 +18,16 @@ Route::get('/',function (){
 ///  ADMIN
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 Route::post('delete-sequencia',[Sequencias::class,'delete'])->name('sequencia.delete');
+Route::post('edit-sequence',[Sequencias::class,'edit'])->name('sequencia.edit');
+
+Route::get('editar-sequencia/{id}',function ($id){
+
+    return view('pages.games.sequencias.editar_sequencia_double',[
+        'sequencia' => \App\Models\DoubleSequence::where('id',$id)->first(),
+        'chats' => Chats::where('user_id',Auth::user()->id)->get()->toArray()
+    ]);
+})->middleware('auth');
 
 
 

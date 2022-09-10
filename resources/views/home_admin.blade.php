@@ -73,10 +73,16 @@
                             <td class="align-middle" style="text-transform: uppercase">{{ $seq['data']->titulo }}</td>
                             <td class="align-middle">{{ toEmoji($seq['data']->sequencia) }}</td>
                             <td class="align-middle text-center">{{ toEmoji(substr($seq['data']->entrada,-1)) }}</td>
-                            <td class="align-middle text-left">
-                                @foreach($seq['grupos'] as $grupo)
-                                    {{ empty($grupo)  }} <br>
-                                @endforeach
+                            <td class="align-middle text-left text-uppercase">
+                                @php
+                                    if($seq['grupos'] == null or count($seq['grupos']) < 1){
+                                        echo "Sequencia sem grupo";
+                                    }else{
+                                        foreach ($seq['grupos'] as $grupo){
+                                            echo $grupo. "<br>";
+                                        }
+                                    }
+                                @endphp
                             </td>
                             <td class="align-middle">
                                 <div class="progress progress-xs">
@@ -109,8 +115,11 @@
     <script>
         $(".action").click(function (){
 
+            if($(this).data('location') === 'edit'){
+                window.location.href = `editar-sequencia/${$(this).data('id')}`
+                return false;
+            }
             var seqId = $(this).data('id')
-
             $.ajax({
                 url: "delete-sequencia",
                 headers: {

@@ -12,7 +12,7 @@ const url = "https://blaze.com/api/roulette_games/recent/history?page=1";
         let resposta =  Object.values(data.records)[0];
 
         if(resposta.id !== id){
-            const urlPost = "https://d8c7-177-149-159-88.sa.ngrok.io/api/blaze/double/resultado"
+            const urlPost = "https://c3ea-2804-d59-831c-5b00-9cd3-ceee-c12a-cda6.sa.ngrok.io/api/blaze/double/resultado"
 
              const post = await got.post(urlPost,{
                  json: data

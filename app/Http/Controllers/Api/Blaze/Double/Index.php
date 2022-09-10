@@ -48,7 +48,7 @@ class Index extends Controller
 
         if(!$existe_resultado):
             Double::create([
-                'id' =>  $lastRecord['id'].Str::random(6),
+                'id' =>  $lastRecord['id'],
                 'color' => $lastRecord['color'],
                 'roll' => $lastRecord['roll'],
                 'server_seed' => $lastRecord['server_seed'],
