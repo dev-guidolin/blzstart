@@ -54,6 +54,7 @@
                             <th class="text-center">Grupos</th>
                             <th class="text-center" style="width: 50%">Progresso</th>
                             <th class="text-center">Acertos</th>
+                            <th class="text-center">Tot. Entradas</th>
                             <th class="text-center">Ação</th>
                         </tr>
                         </thead>
@@ -91,6 +92,9 @@
                             </td>
                             <td class="align-middle text-center">
                                 <span class="badge bg-{{$printAcertos['color']}}"> {{$percentual}}%</span>
+                            </td>
+                            <td class="align-middle text-center">
+                               {{  $seq['data']->erros +  $seq['data']->acertos  }}
                             </td>
                             <td class="text-center align-middle">
                                 <x-adminlte-button theme="outline-danger" icon="fas fa-lg fa-trash" data-id="{{ $seq['data']->id }}" title="Apagar sequência" class="action mb-3 mb-sm-3 mb-lg-0" data-location="delete"/>
