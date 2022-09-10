@@ -7,12 +7,10 @@ use App\Http\Controllers\Telegram\Methods;
 use App\Jobs\EnviarAlertaTelegram;
 use App\Models\Double;
 use App\Models\DoubleSequence;
-use DivisionByZeroError;
 use Illuminate\Http\Request;
-use Illuminate\Queue\Queue;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Psy\Exception\ErrorException;
+use Illuminate\Support\Str;
 
 class Index extends Controller
 {
@@ -26,7 +24,7 @@ class Index extends Controller
     public function recebeResultado(Request $request)
     {
 
-        
+
         $records = $request->input('records') ?? false;
 
 
@@ -50,7 +48,7 @@ class Index extends Controller
 
         if(!$existe_resultado):
             Double::create([
-                'id' =>  $lastRecord['id'],
+                'id' =>  $lastRecord['id'].Str::random(6),
                 'color' => $lastRecord['color'],
                 'roll' => $lastRecord['roll'],
                 'server_seed' => $lastRecord['server_seed'],
@@ -84,13 +82,16 @@ class Index extends Controller
             })
             ->get()->toArray();
 
+
         try {
 
              foreach ($sequencias as $string):
-                
+
 
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
                 $resultadoPartida = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
+
+                dd($resultadoPartida);
 
 
                 // Envia mensagem com o sinal
@@ -100,9 +101,9 @@ class Index extends Controller
 
                 DoubleSequence::where('id',$string['id'])->update($up);
 
-                if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida ):
+                if ($resultadoPartida === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida and $string['chat_id'] != null):
 
-                    
+                    dd($string);
                     $mensagem = $this->alertaDeEntrada($string);
                     $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
@@ -153,7 +154,7 @@ class Index extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Tudo Certo.'
+                'message' => 'Mensagem enviada'
             ],200);
         }catch (\Exception $e){
             return response()->json([

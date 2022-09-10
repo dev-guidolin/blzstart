@@ -17,7 +17,6 @@ class Webhook extends Controller
 
     public function index($request)
     {
-
         if (isset($request['message']['new_chat_participant'])):
 
             $class = new NovoMembro();
@@ -26,22 +25,21 @@ class Webhook extends Controller
         elseif(isset($request['my_chat_member'])):
 
             if($request['my_chat_member']['new_chat_member']['status'] == "member"):
+                // Bot adicionado a um grupo
                 $class = new BotAdicionado();
                 return $class->index($request);
-            elseif($request['my_chat_member']['new_chat_member']['status'] == "left"):
+            elseif($request['my_chat_member']['new_chat_member']['status'] == "left" or $request['my_chat_member']['new_chat_member']['status'] == "kicked"):
+                // Bot removido do grupo
                 $class = new BotRemovido();
                 return $class->index($request);
             endif;
 
         elseif (isset($request['message']['chat']['type'])):
-
             if($request['message']['chat']['type'] != 'private'):
                 return response('mensagem_de_grupo',200);
             endif;
-
             $class = new AtivarCliente();
             return $class->index($request);
-
         else:
             return response('apenas resposta',200);
         endif;

@@ -73,7 +73,7 @@
                             <td class="align-middle" style="text-transform: uppercase">{{ $seq['data']->titulo }}</td>
                             <td class="align-middle">{{ toEmoji($seq['data']->sequencia) }}</td>
                             <td class="align-middle text-center">{{ toEmoji(substr($seq['data']->entrada,-1)) }}</td>
-                            <td class="align-middle text-center">
+                            <td class="align-middle text-left">
                                 @foreach($seq['grupos'] as $grupo)
                                     {{$grupo}} <br>
                                 @endforeach
@@ -108,10 +108,44 @@
 @section('js')
     <script>
         $(".action").click(function (){
-            var location = $(this).data('location')
+
             var seqId = $(this).data('id')
-            let url = location == 'edit' ? 'seq-edit/'+ seqId : 'seq-delete/' + seqId
-            console.log(url)
+
+            $.ajax({
+                url: "delete-sequencia",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data:{id: seqId},
+                type:"post",
+                method:"post",
+                success:(resp)=>{
+
+                    if(resp.success){
+                        Swal.fire({
+                            title: 'Sucesso!',
+                            text: resp.message,
+                            icon: 'success',
+                            confirmButtonText: 'Fechar'
+                        }).then(()=>{
+                            window.location.reload()
+                        })
+                    }else{
+                        Swal.fire({
+                            title: 'Ops!',
+                            text:  resp.message,
+                            icon: 'error',
+                            confirmButtonText: 'Fechar'
+                        })
+                        return false
+                    }
+
+                },
+                error:(err)=>{
+
+                }
+
+            });
         })
     </script>
 @stop

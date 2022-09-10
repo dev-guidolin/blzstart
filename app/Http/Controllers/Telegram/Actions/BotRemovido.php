@@ -19,26 +19,36 @@ class BotRemovido extends Controller
 
     public function index($request)
     {
-        $chat = Chats::where('chat_id',$request['my_chat_member']['chat']['id'])->first();
+        $chat_id = $request['my_chat_member']['chat']['id'];
+        $chat = Chats::where('chat_id',$chat_id)->first();
+
+
 
         if($chat):
 
             $user = User::find($chat->user_id);
-
-            $seq = DoubleSequence::whereIn('chat_id',[$chat->id])->update([
-                'chat_id' => $user->telegram_id
-            ]);
-
-            dd($seq);
+            $sequencias = DoubleSequence::where('user_id',$user->id)->get();
 
             try {
 
+                foreach ($sequencias as $seq):
+                    $xplode = explode(';',$seq->chat_id);
+                    if (count($xplode) < 2):
+                        DoubleSequence::where('id',$seq->id)->update(['chat_id' => null]);
+                    else:
+                        $novosChats = implode(';',array_diff($xplode, array($chat_id)));
+                        DoubleSequence::where('id',$seq->id)->update(['chat_id' =>$novosChats]);
+                    endif;
+                endforeach;
 
                 Chats::where('id',$chat->id)->delete();
+
 
                 $mensagem = "O ".$request['my_chat_member']['from']['username'] . " removeu nosso BOT do grupo ".$request['my_chat_member']['chat']['title'].".";
 
                 $this->methods->enviarMensagem($mensagem,$request['my_chat_member']['from']['id']);
+
+
                 return  response('chat removido',200);
             }catch (\Exception $e)
             {

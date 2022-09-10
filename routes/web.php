@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Actions\Sequencias;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +16,11 @@ Route::get('/',function (){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ///  ADMIN
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Route::post('delete-sequencia',[Sequencias::class,'delete'])->name('sequencia.delete');
+
+
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

@@ -15,7 +15,7 @@ class CreateChatsTable extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->string('chat_id');
+            $table->string('chat_id')->nullable()->default(null);
             $table->string('name');
             $table->string('chat_obs');
             $table->unsignedBigInteger('user_id');
