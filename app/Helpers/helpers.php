@@ -33,3 +33,21 @@ function percentualAcerto($success){
         return 0;
     }
 }
+function show_array($data, $exit = true)
+{
+
+    echo '<pre>';
+    print_r($data);
+    echo '</pre>';
+    if ($exit) {
+        exit;
+    }
+}
+
+function moneyReal($valor)
+{
+    $retorno = number_format($valor, 2, ",", ".");
+
+    return $retorno;
+
+}

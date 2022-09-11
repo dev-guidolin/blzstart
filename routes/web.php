@@ -43,4 +43,9 @@ Route::post('/ajax/criar-sequencia',[\App\Http\Controllers\Jogos\Blaze\Double\Cr
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::get('/mp/pgamento/response',[\App\Http\Controllers\MercadoPago\Response::class,'index'])->middleware('auth')->name('mp.response.get');
+Route::get('/mp/planos',function (){
+    return view('pages.cobrancas.planos',['planos' => \App\Models\Planos::get()]);
+})->middleware('auth')->name('mp.planos');
+
+Route::post('mp/assinar-plano',[\App\Http\Controllers\MercadoPago\AssinarPlano::class,'assinar'])->middleware('auth')->name('mp.assinarplano');
 
