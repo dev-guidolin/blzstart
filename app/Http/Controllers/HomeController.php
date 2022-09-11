@@ -33,9 +33,6 @@ class HomeController extends Controller
             return $acerto += $coluna->acertos;
         },0);
 
-
-
-
         $sequencias = [];
         foreach ($user->doubleSequence as $seq):
             $sequencias[$seq->id] = [
@@ -60,7 +57,6 @@ class HomeController extends Controller
             'telegram' => $user->telegram_token,
             'mensalidade' => $user->mensalidade,
             'totalAcertos' => $totalAcertos,
-            'sequencias' => count($user->doubleSequence),
             'mp_id' => '',
             'mp_initPoint' => '',
             'sequencias' => $sequencias,

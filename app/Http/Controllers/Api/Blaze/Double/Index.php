@@ -76,6 +76,7 @@ class Index extends Controller
         $sequencias = DoubleSequence::with('user:id,telegram_id,name')
             ->whereHas('user',function ($q){
                 return $q->where('status','ativo')
+                    ->orWhere('status','novo')
                     ->where('mensalidade','>=',Carbon::now()->subDays(30))
                     ->where('level','regular')
                     ->where('telegram_id','<>',null);
@@ -86,8 +87,6 @@ class Index extends Controller
         try {
 
              foreach ($sequencias as $string):
-
-
                 $totalCaracteresResultadoPartida = strlen($string['sequencia']);
                 $resultadoRodada = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
 
@@ -95,13 +94,6 @@ class Index extends Controller
                 DoubleSequence::where('id',$string['id'])->update([
                     'aguardar' => DB::raw('aguardar + 1'),
                 ]);
-
-                 //dd($string,$resultadoRodada);
-
-                 // Resulstado da rodadate igual à sequencia do foreach
-                 // Ainda não recebeu alerta
-                 // Aguardar
-                 //if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida and $string['chat_id'] != null):
 
                  if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and  !$string['alerted']  and $string['chat_id'] != null and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida):
 

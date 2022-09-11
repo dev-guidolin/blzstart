@@ -14,26 +14,21 @@
             </x-adminlte-alert>
         </div>
         <div class="col-sm-3">
-            @if(mensalidadeEmDia($mensalidade))
-                <x-adminlte-alert theme="info" icon="fas fa-lg fa-thumbs-up" title="STATUS CONTA">
+            @if($user->status == 'novo' && mensalidadeEmDia($mensalidade))
+                <x-adminlte-alert theme="" icon="fas fa-lg fa-thumbs-up" title="Conta Teste" style="background: #ff7c7c; color: white">
+                   Teste até dia {{ \Carbon\Carbon::parse($user->mensalidade)->format('d-m-Y H:i')  }}
+                </x-adminlte-alert>
+            @elseif(mensalidadeEmDia($mensalidade))
+                <x-adminlte-alert theme="success" icon="fas fa-lg fa-thumbs-up" title="STATUS CONTA">
                     Conta Ativa
                 </x-adminlte-alert>
             @else
-                <x-adminlte-alert theme="danger" icon="fas fa-lg fa-exclamation" title="STATUS CONTA">
-                    Ops, sua mensalidade está em aberto.
-                </x-adminlte-alert>
+                <a href="">
+                    <x-adminlte-alert theme="danger" icon="fas fa-lg fa-exclamation" title="STATUS CONTA">
+                        SUSPENSA. Clique para regularizar.
+                    </x-adminlte-alert>
+                </a>
             @endif
-        </div>
-        <div class="col-sm-3">
-            <x-adminlte-alert theme="success" icon="fas fa-lg fa-check" title="ACERTOS">
-                {{$totalAcertos}}
-            </x-adminlte-alert>
-        </div>
-
-    </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <x-adminlte-small-box title="" text="Sequencia Double" theme="teal" url="{{route('double.criar')}}" url-text="Criar"/>
         </div>
 
     </div>
@@ -41,7 +36,8 @@
         <div class="col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Sequências cadastradas</h3>
+                    <span style=" font-size: 32px">Suas sequências</span>
+                    <a href="{{route('double.criar')}}"><button type="button" class="btn btn-primary  float-sm-right ">CRIAR SEQUÊNCIA BLAZE</button></a>
                 </div>
 
                 <div class="card-body p-0">
