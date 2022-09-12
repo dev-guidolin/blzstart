@@ -19,7 +19,7 @@
                                 <h5 class="card-title">{{ strtoupper($plano->nome)     }}</h5>
                                 <p class="card-text">APENAS {{moneyReal($plano->valor)}}</p>
                                 <p class="card-text">Valor mensal : R$ {{ moneyReal($plano->valor / $plano->validade) }}</p>
-                                <a href="javascript:void()" class="btn btn-primary" data-id="{{ $plano->id }}">Assinar</a>
+                                <a href="javascript:void(0)" class="btn btn-primary" data-id="{{ $plano->id }}">Assinar</a>
                             </div>
                         </div>
                     </div>
