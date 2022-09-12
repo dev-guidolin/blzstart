@@ -13,7 +13,7 @@ class AssinarPlano extends Controller
         if(Planos::find($request->id)):
 
             $mp = new GerarLinkCobranca();
-            $link = $mp->mp($request->id);
+            $link = $mp->index($request->id);
 
             return response()->json([
                 'success' => true,
