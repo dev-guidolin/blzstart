@@ -29,15 +29,15 @@ class Index extends Controller
             "pending" =>    route('mp.response.get'),
         );
 
-        $planos = Planos::find($planoId);
+        $planos = Planos::first($planoId);
         // Params de retorno:
         // payment_id , status, external_reference, merchant_order_id
         // https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/checkout-customization/additional-configuration
 
         $item = new MercadoPago\Item();
-        $item->title = 'Mensalidade';
+        $item->title = strtoupper($planos->nome) . " - Bot Sinais";
         $item->quantity = 1;
-        $item->unit_price = 75.56;
+        $item->unit_price = $planos->valor;
         $preference->items = array($item);
         $preference->save();
 
@@ -47,11 +47,11 @@ class Index extends Controller
                 'valor' => $planos->valor,
                 'plano' => $item->title,
                 'preference_id' => $preference->id,
-                'validade_plano' => now()->addDays($planos->validade)
+                'validade_plano' => now()->addMonths($planos->validade)
             ];
             Cobranca::create($array);
         }catch (\Exception $e){
-            dd($e->getMessage());
+            return "Erro ao gerar link de pagamento, entre em contato com o suporte.";
         }
 
 

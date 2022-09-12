@@ -10,8 +10,6 @@ class AssinarPlano extends Controller
 {
     public function assinar(Request $request)
     {
-
-
         if(Planos::find($request->id)):
 
             $mp = new Index();
