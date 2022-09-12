@@ -32,7 +32,7 @@
         </div>
         <div class="col-sm-3">
             @if($user->plano == null)
-            <a href="">
+            <a href="{{ route('mp.planos') }}">
                 <x-adminlte-alert theme="danger" icon="fab fa-lg fa-telegram" title="ASSINATURAS">
                     Você ainda não tem assinatura, clique para assinar
                 </x-adminlte-alert>
