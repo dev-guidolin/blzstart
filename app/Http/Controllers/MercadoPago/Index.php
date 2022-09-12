@@ -35,7 +35,7 @@ class Index extends Controller
         // https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/checkout-customization/additional-configuration
 
         $item = new MercadoPago\Item();
-        $item->title = strtoupper($planos->nome) . " - Bot Sinais";
+        $item->title = "PLANO ".strtoupper($planos->nome) . " - botsinais.com.br";
         $item->quantity = 1;
         $item->unit_price = $planos->valor;
         $preference->items = array($item);
