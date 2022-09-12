@@ -71,6 +71,7 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'status' => 'novo',
             'mensalidade' => now()->subDay(3),
+            'plano' => null,
             'level' => 'regular',
             'telegram_id' => null,
             'whatsapp_id' => null,

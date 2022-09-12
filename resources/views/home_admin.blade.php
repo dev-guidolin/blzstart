@@ -14,7 +14,7 @@
             </x-adminlte-alert>
         </div>
         <div class="col-sm-3">
-            @if($user->status == 'novo' && mensalidadeEmDia($mensalidade))
+            @if($user->status == 'novo')
                 <x-adminlte-alert theme="" icon="fas fa-lg fa-thumbs-up" title="Conta Teste" style="background: #ff7c7c; color: white">
                    Teste até dia {{ \Carbon\Carbon::parse($user->mensalidade)->format('d-m-Y H:i')  }}
                 </x-adminlte-alert>
@@ -23,7 +23,7 @@
                     Conta Ativa
                 </x-adminlte-alert>
             @else
-                <a href="">
+                <a href="{{ route('mp.planos') }}">
                     <x-adminlte-alert theme="danger" icon="fas fa-lg fa-exclamation" title="STATUS CONTA">
                         SUSPENSA. Clique para regularizar.
                     </x-adminlte-alert>

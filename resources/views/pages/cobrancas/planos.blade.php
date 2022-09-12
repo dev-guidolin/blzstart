@@ -8,20 +8,25 @@
 
 @section('content')
     <div class="row mt-5">
-        @foreach($planos as $plano)
-            <div class="col-sm-4">
-                <div class="card" >
-                    <img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1468&q=80"  class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ strtoupper($plano->nome)     }}</h5>
-                        <p class="card-text">APENAS {{moneyReal($plano->valor)}}</p>
-                        <p class="card-text">Valor mensal : R$ {{ moneyReal($plano->valor / $plano->validade) }}</p>
-                        <a href="#" class="btn btn-primary" data-id="{{ $plano->id }}">Assinar</a>
-                    </div>
-                </div>
-            </div>
-        @endforeach
+        <div class="col-sm-8 mx-auto">
 
+            <div class="row">
+                @foreach($planos as $plano)
+                    <div class="col-sm-4">
+                        <div class="card shadow" >
+                            <img src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1468&q=80"  class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ strtoupper($plano->nome)     }}</h5>
+                                <p class="card-text">APENAS {{moneyReal($plano->valor)}}</p>
+                                <p class="card-text">Valor mensal : R$ {{ moneyReal($plano->valor / $plano->validade) }}</p>
+                                <a href="javascript:void()" class="btn btn-primary" data-id="{{ $plano->id }}">Assinar</a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+        </div>
     </div>
 @stop
 

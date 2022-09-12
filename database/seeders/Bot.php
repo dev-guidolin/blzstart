@@ -13,6 +13,10 @@ class Bot extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\Bot::create([
+            'token' => env('TELEGRAM_BOT_TOKEN'),
+            'name' => 'Pepe Legal',
+            'obs' => ''
+        ]);
     }
 }
