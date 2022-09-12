@@ -168,14 +168,15 @@ class Index extends Controller
 
         $description = strlen($success['descricao']) > 1 ? "<b>🗯️ ".$success['descricao']."</b>".PHP_EOL.PHP_EOL : "";
         $string =
-            "<b>🎲 Double - Blaze </b> ".PHP_EOL.
-            "<b>💥 ".strtoupper($success['titulo'])." 💥</b> ".PHP_EOL.PHP_EOL.
+            "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
+            "<b>".strtoupper($success['titulo'])." </b> ".PHP_EOL.PHP_EOL.
+
+
+            "<b>✅ PALPITE EM ✅</b>".PHP_EOL.PHP_EOL.
+            "<b>👉 ".toEmoji(substr($success['entrada'],-1))." 👈</b>".PHP_EOL.PHP_EOL.
 
             $description.
 
-            "<b>✅ PALPITE EM ✅</b>".PHP_EOL.PHP_EOL.
-            "<b>👉 ".toEmoji(substr($success['entrada'],-1))." 👈</b>".PHP_EOL.
-            "<b>Assertividade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
             '🤖 Bot criado em <a href="https://botsinais.com.br">botsinais.com.br</a>'.PHP_EOL.
             '🥉 Suporte @turista';
@@ -204,8 +205,9 @@ class Index extends Controller
         $string = "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
             "<b>🔴 PALPITE INCORRETO 🔴</b>".PHP_EOL.PHP_EOL.
             "<b>🕐 ".Carbon::parse($success['alerted_at'])->setTimezone('America/Sao_paulo')->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
+            "<b>Palpite: " . toEmoji(substr($success['entrada'],-1)) . "<b>".PHP_EOL.PHP_EOL.
 
-            "<b>Assertivdade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
+            //"<b>Assertivdade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
             '🤖 Bot criado em <a href="https://botsinais.com.br">botsinais.com.br</a>'.PHP_EOL.
             '🥉 Suporte @turista';
