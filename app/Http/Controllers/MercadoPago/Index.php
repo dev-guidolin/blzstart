@@ -29,7 +29,7 @@ class Index extends Controller
             "pending" =>    route('mp.response.get'),
         );
 
-        $planos = Planos::first($planoId);
+        $planos = Planos::whereId($planoId)->first();
         // Params de retorno:
         // payment_id , status, external_reference, merchant_order_id
         // https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/checkout-customization/additional-configuration
