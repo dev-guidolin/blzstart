@@ -27,7 +27,11 @@ class HomeController extends Controller
         $user = User::whereId($userId)
             ->with('doubleSequence')
             ->with('chats')
+            ->with('plano')
             ->first();
+
+//        dd($user);
+
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
             return $acerto += $coluna->acertos;

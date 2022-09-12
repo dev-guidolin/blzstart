@@ -30,6 +30,22 @@
                 </a>
             @endif
         </div>
+        <div class="col-sm-3">
+            @if($user->plano == null)
+            <a href="">
+                <x-adminlte-alert theme="danger" icon="fab fa-lg fa-telegram" title="ASSINATURAS">
+                    Você ainda não tem assinatura, clique para assinar
+                </x-adminlte-alert>
+            </a>
+            @else
+            @php
+            $plano = "PLANO ".strtoupper($user->plano->nome);
+            @endphp
+                <x-adminlte-alert theme="info" icon="fa-solid fa-bookmark" :title="$plano">
+                    Sua assintura está válida até {{ \Illuminate\Support\Carbon::parse($user->$mensalidade)->format('d-m-Y')}}
+                </x-adminlte-alert>
+            @endif
+        </div>
 
     </div>
     <div class="row">

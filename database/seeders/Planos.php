@@ -19,7 +19,6 @@ class Planos extends Seeder
             ['nome' => 'semestral','validade' => 6,'valor' => 549.99],
         ];
 
-        \App\Models\Planos::truncate();
         foreach ($planos as $plano):
             \App\Models\Planos::create($plano);
         endforeach;
