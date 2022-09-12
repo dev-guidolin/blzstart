@@ -35,9 +35,9 @@ class GerarLinkCobranca extends Controller
         // https://www.mercadopago.com.br/developers/pt/docs/checkout-api/integration-test/test-cards
 
         $item = new MercadoPago\Item();
-        $item->title = 'Mensalidade';
+        $item->title = strtoupper($planos->valor) . " - Bot Sinais";
         $item->quantity = 1;
-        $item->unit_price = 75.56;
+        $item->unit_price = $planos->valor;
         $preference->items = array($item);
         $preference->save();
 
@@ -47,13 +47,13 @@ class GerarLinkCobranca extends Controller
                 'valor' => $planos->valor,
                 'plano' => $item->title,
                 'preference_id' => $preference->id,
-                'validade_plano' => now()->addDays($planos->validade)
+                'validade_plano' => now()->addMonths($planos->validade)
             ];
             Cobranca::create($array);
             //init_point
             return $preference;
         }catch (\Exception $e){
-            dd($e->getMessage());
+            return "Erro ao gerar lnk de pagamento.";
         }
 
 
