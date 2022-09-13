@@ -18,17 +18,17 @@ class Novouser extends Seeder
     {
         User::create([
             'name'              => 'thiago',
-            'email'             => 'thiago@teste.com',
+            'email'             => 'thiago@gmail.com',
             'email_verified_at' => null,
             'mensalidade'       => now(),
             'plano_id'          => null,
             'password'          => Hash::make('bundamole'),
             'status'            => 'ativo',
             'level'             => 'regular',
-            'telegram_id'       => Str::random(4),
-            'whatsapp_id'       => Str::random(4),
-            'whatsapp_token'    => Str::random(4),
-            'telegram_token'    => Str::random(4),
+            'telegram_id'       => null,
+            'whatsapp_id'       => null,
+            'whatsapp_token'    => mb_strtoupper(Str::random(4)),
+            'telegram_token'    => mb_strtoupper(Str::random(4)),
             'phone'             => null,
             'remember_token'    => Str::random(10),
         ]);

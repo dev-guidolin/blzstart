@@ -21,16 +21,12 @@ class HomeController extends Controller
     public function index() : Renderable
     {
 
-        // Aqui renderiza pagina inicial do admin
-
         $userId = Auth::user()->getAuthIdentifier();
         $user = User::whereId($userId)
             ->with('doubleSequence')
             ->with('chats')
             ->with('plano')
             ->first();
-
-//        dd($user);
 
 
         $totalAcertos = $user->doubleSequence->reduce(function ($acerto,$coluna){
@@ -47,24 +43,15 @@ class HomeController extends Controller
                     ->map(function($name){  return $name->name;})
             ];
         endforeach;
-        //dd($sequencias);
-
-
-        //$teste = new GerarLinkCobranca();
-        //$link =  $teste->index(1);
-
 
 
         $data = [
-            'user' => $user,
-            'chats' => count($user->chats),
-            'telegram' => $user->telegram_token,
-            'mensalidade' => $user->mensalidade,
-            'totalAcertos' => $totalAcertos,
-            'mp_id' => '',
-            'mp_initPoint' => '',
-            'sequencias' => $sequencias,
-
+            'user'          => $user,
+            'chats'         => count($user->chats),
+            'telegram'      => $user->telegram_token,
+            'mensalidade'   => $user->mensalidade,
+            'sequencias'    => $sequencias,
+            'acertos'       => $totalAcertos
 
         ];
 

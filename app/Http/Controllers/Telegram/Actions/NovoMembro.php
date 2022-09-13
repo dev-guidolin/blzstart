@@ -28,7 +28,7 @@ class NovoMembro extends Controller
                 'user_name' => $participanteId['username']
             ]);
             $this->methods->enviarMensagem('o usuário tal, entreou no grupo talb.',$participanteId['id']);
-            return respose('membro salvo com sucesso',200);
+            return response('membro salvo com sucesso',200);
         endif;
 
         return response('participante não encontrado ou é o próprio bot',200);

@@ -44,16 +44,12 @@ class Index extends Controller
             ],200);
         endif;
 
-
-
-        if(!$existe_resultado):
-            Double::create([
-                'id' =>  $lastRecord['id'],
-                'color' => $lastRecord['color'],
-                'roll' => $lastRecord['roll'],
-                'server_seed' => $lastRecord['server_seed'],
-            ]);
-        endif;
+        Double::create([
+            'id' =>  $lastRecord['id'],
+            'color' => $lastRecord['color'],
+            'roll' => $lastRecord['roll'],
+            'server_seed' => $lastRecord['server_seed'],
+        ]);
 
         // Busca todos os 100 utimos resultados do banco (já contando com a entrada atual)
 

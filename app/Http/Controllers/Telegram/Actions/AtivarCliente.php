@@ -17,8 +17,11 @@ class AtivarCliente extends Controller
     public function index($request)
     {
         $chatId =  $request['message']['from']['id'];
-        $telegramToken = $request['message']['text'];
+        $telegramToken = $request['message']['text'] ?? null;
 
+        if($telegramToken == null):
+            return response("Alterações em grupos",200);
+        endif;
 
         // Verifica se cliente já está cadastrado
         $cliente =  User::where('telegram_id',$chatId)->first();

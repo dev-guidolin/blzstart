@@ -8,6 +8,7 @@ use App\Http\Controllers\Telegram\Actions\BotAdicionado;
 use App\Http\Controllers\Telegram\Actions\BotRemovido;
 use App\Http\Controllers\Telegram\Actions\MembroRemovido;
 use App\Http\Controllers\Telegram\Actions\NovoMembro;
+use App\Models\Chats;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -35,11 +36,21 @@ class Webhook extends Controller
             endif;
 
         elseif (isset($request['message']['chat']['type'])):
-            if($request['message']['chat']['type'] != 'private'):
-                return response('mensagem_de_grupo',200);
+
+            if (isset($request['message']['new_chat_title'])):
+                Chats::where('chat_id',$request['message']['chat']['id'])->update([
+                    'name' => $request['message']['new_chat_title']
+                ]);
+                return response('Título do grupo alterado',200);
+            elseif (isset($request['message']['text']) and$request['message']['chat']['type'] !== "private" ):
+                return response('mensagem do grupo',200);
+            elseif(isset($request['message']['new_chat_photo'])):
+                return response('Grupo mudou de foto',200);
             endif;
+
             $class = new AtivarCliente();
             return $class->index($request);
+
         else:
             return response('apenas resposta',200);
         endif;
