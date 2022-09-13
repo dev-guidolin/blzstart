@@ -9,6 +9,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::middleware('api')->post('/mercadopago/webhook',[\App\Http\Controllers\Api\MercadoPago\Webhook::class,'index'])->name('mp.webhook');
 Route::middleware('api')->post('/telegram/webhook',function (Request $request){
 
     if (isset($request['message']['from']['is_bot']) and $request['message']['from']['is_bot']):
