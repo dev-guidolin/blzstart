@@ -94,7 +94,7 @@
                 </p>
                 <h4 class="destak-green text-center">COMECE A FATURAR COM SUAS TÁTICAS AGORA</h4>
                 <div class="d-grid gap-2">
-                    <button class="btn-color planos" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">Assinar Plano </button>
+                    <button class="btn-color planos" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">3 DIAS GRÁTIS e SEM ADESÃO</button>
                 </div>
             </div>
             <div class="col-md-10 mx-auto col-lg-5">
@@ -160,6 +160,7 @@
         <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
             <h1 class="display-4 fw-normal">OS PLANOS MAIS BARATOS DA INTERNET</h1>
             <h3 class="text-red text-center">SEM TAXA DE ADESÃO!</h3>
+            <h1>3 dias GRÁTIS para testar</h1>
             <p class="fs-5 text-muted">
 
             </p>
@@ -172,7 +173,7 @@
                         <h4 class="my-0 fw-normal">Mensal</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">R$ 49,90<small class="text-muted fw-light">/mês</small></h1>
+                        <h1 class="card-title pricing-card-title">R$ {{$planos['mensal']}}<small class="text-muted fw-light">/mês</small></h1>
                         <ul class="list-unstyled  mt-3 mb-4" style="text-align: left!important;">
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze  Double </li>
                             <li><i class="fa-solid fa-x text-red"></i> Crie Robôes para Blaze Crash  ( em breve )</li>
@@ -193,7 +194,7 @@
                         <h4 class="my-0 fw-normal">Trimestral</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">R$ 44,90<small class="text-muted fw-light">/mês</small></h1>
+                        <h1 class="card-title pricing-card-title">R$ {{$planos['trimestral']}}<small class="text-muted fw-light">/mês</small></h1>
                         <ul class="list-unstyled  mt-3 mb-4" style="text-align: left!important;">
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze  Double </li>
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze Crash  ( em breve )</li>
@@ -214,7 +215,7 @@
                         <h4 class="my-0 fw-normal">Semestral</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">R$ 39,90<small class="text-muted fw-light">/mês</small></h1>
+                        <h1 class="card-title pricing-card-title">R$ {{$planos['semestral']}}<small class="text-muted fw-light">/mês</small></h1>
                         <ul class="list-unstyled  mt-3 mb-4" style="text-align: left!important;">
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze  Double </li>
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze Crash  ( em breve )</li>
@@ -241,7 +242,7 @@ $(function (){
             scrollTop: $("#planos").offset().top,
         }, 1000)
     })
-    $(".contratar").click(function (){
+    $(".btn-lg").click(function (){
         window.location.href = "{{ route('register') }}"
     })
 })

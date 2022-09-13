@@ -11,7 +11,14 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/',function (){
-   return view('pages.home.home');
+
+    $planos = [];
+    foreach(App\Models\Planos::get() as $item){
+
+        $planos[$item->nome] = moneyReal($item->valor);
+    };
+
+   return view('pages.home.home',['planos' => $planos]);
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
