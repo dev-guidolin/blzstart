@@ -16,7 +16,7 @@ class GerarLinkCobranca extends Controller
 
         $preference = new MercadoPago\Preference();
         $preference->payment_methods =  [
-            "excluded_payment_methods" => [
+            "excluded_payment_typesgit ad" => [
                 ["id" => "ticket"]
             ],
         ];
