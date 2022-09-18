@@ -181,13 +181,11 @@ class Index extends Controller
     protected function apostaCerta($success)
     {
 
-
         $string = "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
             "<b>✅ PALPITE CERTEIRO ✅</b>".PHP_EOL.PHP_EOL.
             "<b>TOTAL ACERTOS: ".$success['acertos']."</b>".PHP_EOL.PHP_EOL.
             "<b>🕐 ".Carbon::parse($success['alerted_at'])->setTimezone('America/Sao_paulo')->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
             "<b>Entrada: ".toEmoji(substr($success['entrada'],-1))."</b>".PHP_EOL.
-            "<b>Assertividade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
             '🤖 Bot criado em <a href="https://botsinais.com.br">botsinais.com.br</a>'.PHP_EOL.
             '🥉 Suporte @turista';
