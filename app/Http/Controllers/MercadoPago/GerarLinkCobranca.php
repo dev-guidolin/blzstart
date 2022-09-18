@@ -46,6 +46,7 @@ class GerarLinkCobranca extends Controller
                 'user_id' => auth()->id(),
                 'valor' => $planos->valor,
                 'plano' => $item->title,
+                'status' => 'pending',
                 'preference_id' => $preference->id,
                 'validade_plano' => now()->addMonths($planos->validade)
             ];
