@@ -77,7 +77,8 @@ class Index extends Controller
                     ->where('level','regular')
                     ->where('telegram_id','<>',null);
             })
-            ->get()->toArray();
+            ->get()
+            ->toArray();
 
 
         try {
@@ -125,7 +126,7 @@ class Index extends Controller
                         DoubleSequence::where('id',$string['id'])->update([
                             'alerted' => 0,
                             'alerted_at' => now()->toDate(),
-                            'erros' => DB::raw('acertos + 1'),
+                            'erros' => DB::raw('erros + 1'),
                             'aguardar' =>  0
                         ]);
 
