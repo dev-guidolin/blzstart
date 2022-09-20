@@ -122,21 +122,21 @@ class Index extends Controller
                         $mensagem = $this->apostaCerta($string);
                         $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
-                endif;
+                    endif;
 
-                if($resultadoPartidaAcerto != $string['entrada'] and $string['alerted'] ):
+                    if($resultadoPartidaAcerto != $string['entrada'] and $string['alerted'] ):
 
-                    DoubleSequence::where('id',$string['id'])->update([
-                        'alerted' => 0,
-                        'alerted_at' => now()->toDate(),
-                        'erros' => DB::raw('acertos + 1'),
-                        'aguardar' =>  0
-                    ]);
+                        DoubleSequence::where('id',$string['id'])->update([
+                            'alerted' => 0,
+                            'alerted_at' => now()->toDate(),
+                            'erros' => DB::raw('acertos + 1'),
+                            'aguardar' =>  0
+                        ]);
 
-                    $mensagem = $this->apostaErrada($string);
-                    $this->filaEnviarMensagem($mensagem,$string['chat_id']);
+                        $mensagem = $this->apostaErrada($string);
+                        $this->filaEnviarMensagem($mensagem,$string['chat_id']);
 
-                endif;
+                    endif;
                 endif;
 
             endforeach;
