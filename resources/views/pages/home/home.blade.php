@@ -91,17 +91,18 @@
                     <i class="fa-solid fa-arrow-right text-white"></i>
                 </p>
                 <h4 class="destak-green text-center">COMECE A FATURAR COM SUAS TÁTICAS AGORA</h4>
-                <div class="row">
-                    <div class="col-12 col-sm-8">
-                        <div class="d-grid gap-4">
-                            <button class="btn-color btn-block" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">3 DIAS GRÁTIS e SEM ADESÃO</button>
-                        </div>
+                <div class="row g-5">
+                    <div class="col-12 col-sm-8 text-center rounded planos" style="background: #f12c4c; color: white; padding: 25px; font-size: 22px">
+                        3 DIAS GRÁTIS e SEM ADESÃO
                     </div>
-                    <div class="col-12 col-sm-2">
-                        <div class="d-grid gap-4">
-                            <a href="/login"> <button style="background: #59ce8f" class="btn-color planos btn-block" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">login</button></a>
-                        </div>
+                    <div class="col-12 col-sm-4">
+                        <a href="/login" class="text-decoration-none" title="Entrar em sua conta">
+                            <div class=" text-center rounded" style="background: #59ce8f; color: white; padding: 25px; font-size: 22px; text-transform: uppercase;">
+                                login
+                            </div>
+                        </a>
                     </div>
+
                 </div>
             </div>
             <div class="col-md-10 mx-auto col-lg-5">
