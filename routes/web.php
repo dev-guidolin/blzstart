@@ -15,7 +15,7 @@ Route::get('/',function (){
     $planos = [];
     foreach(App\Models\Planos::get() as $item){
 
-        $planos[$item->nome] = moneyReal($item->valor);
+        $planos[$item->nome] = $item->valor;
     };
 
    return view('pages.home.home',['planos' => $planos]);

@@ -84,15 +84,17 @@ class Index extends Controller
         try {
 
              foreach ($sequencias as $string):
-                $totalCaracteresResultadoPartida = strlen($string['sequencia']);
-                $resultadoRodada = substr($coresStringUltimosCem, -$totalCaracteresResultadoPartida);
+                $totalCaracteresResultadoDaSequencia = strlen($string['sequencia']);
+                $resultadoRodada = substr($coresStringUltimosCem, -$totalCaracteresResultadoDaSequencia);
 
-                // Envia mensagem com o sinal
+
+                 // Envia mensagem com o sinal
                 DoubleSequence::where('id',$string['id'])->update([
                     'aguardar' => DB::raw('aguardar + 1'),
                 ]);
 
-                 if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and  !$string['alerted']  and $string['chat_id'] != null and $string['aguardar'] + 1 >= $totalCaracteresResultadoPartida):
+
+                 if ($resultadoRodada === $string['sequencia'] and !$string['alerted'] and $string['chat_id'] != null and $string['aguardar'] + 1 >= $totalCaracteresResultadoDaSequencia):
 
                     $mensagem = $this->alertaDeEntrada($string);
                     $this->filaEnviarMensagem($mensagem,$string['chat_id']);
@@ -159,7 +161,6 @@ class Index extends Controller
             EnviarAlertaTelegram::dispatch($mensagem,trim($chat));
         endforeach;
     }
-
     protected function alertaDeEntrada($success)
     {
 

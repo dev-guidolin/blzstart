@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"  />
     <link href="{{ mix('pages/home/css/app.css') }}" rel="stylesheet">
-    <title>Document</title>
+    <title>Bot Sinais</title>
 
     <style>
         html,body{
@@ -84,17 +84,24 @@
         <div class="row align-items-center g-lg-5 py-5 ">
             <div class="col-lg-7 text-center text-lg-start" >
                 <h1 class="display-4 fw-bold lh-1 mb-3 text-center destak" >
-                   CRIE GRUPOS DE SINAIS NO TELEGRAM <b class="destak-green">ILIMITADOS!</b>
+                   CRIE GRUPOS DE SINAIS BLAZE NO TELEGRAM <b class="destak-green">ALERTAS ILIMITADOS!</b>
                 </h1>
                 <p class="col-lg-10 fs-4 text-white">
                     Crie grupos e envie sinais para seus assinantes sem limite de mensagens e nem limite de grupos!
-
                     <i class="fa-solid fa-arrow-right text-white"></i>
-
                 </p>
                 <h4 class="destak-green text-center">COMECE A FATURAR COM SUAS TÁTICAS AGORA</h4>
-                <div class="d-grid gap-2">
-                    <button class="btn-color planos" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">3 DIAS GRÁTIS e SEM ADESÃO</button>
+                <div class="row">
+                    <div class="col-12 col-sm-8">
+                        <div class="d-grid gap-4">
+                            <button class="btn-color btn-block" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">3 DIAS GRÁTIS e SEM ADESÃO</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-2">
+                        <div class="d-grid gap-4">
+                            <a href="/login"> <button style="background: #59ce8f" class="btn-color planos btn-block" type="button" title="Enviei seus palpites para grupos no Telegram e ganhe dinheiro com isso.">login</button></a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-10 mx-auto col-lg-5">
@@ -131,7 +138,7 @@
                 <div>
                     <h2>Métricas de Acertos</h2>
                     <p>
-                        Nossas métricas irá lhe ajudar a montar suas estratégicas, nosso algoritmo irá auxiliar para que seus membros tenham o maior número de acertos.
+                        Nossas métricas irão lhe ajudar a montar  estratégias, nosso algoritmo irá auxiliar para que seus membros tenham o maior número de acertos.
                     </p>
                     <a href="#" class="btn btn-primary planos">
                         Assinar plano
@@ -194,7 +201,7 @@
                         <h4 class="my-0 fw-normal">Trimestral</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">R$ {{$planos['trimestral']}}<small class="text-muted fw-light">/mês</small></h1>
+                        <h1 class="card-title pricing-card-title">R$ {{moneyReal($planos['trimestral']/3)}}<small class="text-muted fw-light">/mês</small></h1>
                         <ul class="list-unstyled  mt-3 mb-4" style="text-align: left!important;">
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze  Double </li>
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze Crash  ( em breve )</li>
@@ -215,7 +222,7 @@
                         <h4 class="my-0 fw-normal">Semestral</h4>
                     </div>
                     <div class="card-body">
-                        <h1 class="card-title pricing-card-title">R$ {{$planos['semestral']}}<small class="text-muted fw-light">/mês</small></h1>
+                        <h1 class="card-title pricing-card-title">R$ {{moneyReal($planos['semestral'] / 6)}}<small class="text-muted fw-light">/mês</small></h1>
                         <ul class="list-unstyled  mt-3 mb-4" style="text-align: left!important;">
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze  Double </li>
                             <li><i class="fa fa-check text-green"></i> Crie Robôes para Blaze Crash  ( em breve )</li>
