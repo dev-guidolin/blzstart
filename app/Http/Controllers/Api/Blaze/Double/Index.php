@@ -201,7 +201,7 @@ class Index extends Controller
         $string = "<b>🎲 Double - Blaze </b> ".PHP_EOL.PHP_EOL.
             "<b>🔴 PALPITE INCORRETO 🔴</b>".PHP_EOL.PHP_EOL.
             "<b>🕐 ".Carbon::parse($success['alerted_at'])->setTimezone('America/Sao_paulo')->format('d-m-Y H:i:s')."</b>".PHP_EOL.PHP_EOL.
-            "<b>Palpite: " . toEmoji(substr($success['entrada'],-1)) . "<b>".PHP_EOL.PHP_EOL.
+            "<b>Palpite: " . toEmoji(substr($success['entrada'],-1)) . "<b>".PHP_EOL.
 
             //"<b>Assertivdade. ".intval(percentualAcerto($success))." %</b>".PHP_EOL.PHP_EOL.
 
