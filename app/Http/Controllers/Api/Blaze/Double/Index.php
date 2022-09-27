@@ -73,7 +73,7 @@ class Index extends Controller
             ->whereHas('user',function ($q){
                 return $q->where('status','ativo')
                     ->orWhere('status','novo')
-                    ->where('mensalidade','>=',Carbon::now()->subDays(30))
+                    ->where('mensalidade','>=',Carbon::now())
                     ->where('level','regular')
                     ->where('telegram_id','<>',null);
             })
