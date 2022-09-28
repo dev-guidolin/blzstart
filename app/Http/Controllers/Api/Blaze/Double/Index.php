@@ -55,7 +55,7 @@ class Index extends Controller
 
         $resultadosCount = Double::get()->count();
 
-        if($resultadosCount >= 150):
+        if($resultadosCount >= 350):
             Double::oldest()->take(50)->forceDelete();
         endif;
 
