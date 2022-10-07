@@ -18,11 +18,11 @@
                 <x-adminlte-alert theme="" icon="fas fa-lg fa-thumbs-up" title="Conta Teste" style="background: #ff7c7c; color: white">
                    Teste até dia {{ \Carbon\Carbon::parse($user->mensalidade)->format('d-m-Y H:i')  }}
                 </x-adminlte-alert>
-            @elseif(mensalidadeEmDia($mensalidade))
+            @elseif( mensalidadeEmDia($mensalidade) and $user->status == "ativo")
                 <x-adminlte-alert theme="success" icon="fas fa-lg fa-thumbs-up" title="STATUS CONTA">
                     Conta Ativa
                 </x-adminlte-alert>
-            @else
+            @elseif( $user->status == 'pendente' or !mensalidadeEmDia($mensalidade) )
                 <a href="{{ route('mp.planos') }}">
                     <x-adminlte-alert theme="danger" icon="fas fa-lg fa-exclamation" title="STATUS CONTA">
                         SUSPENSA. Clique para regularizar.
