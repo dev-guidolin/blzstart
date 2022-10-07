@@ -16,7 +16,7 @@ class NewUser
     public function created(User $user)
     {
         $chatid = '1091652075';
-        $mensagem = "Novo usuários cadastrada.";
+        $mensagem = "Novo usuários cadastrado.";
         $telegram = new Methods();
         $telegram->enviarMensagem($mensagem,$chatid);
     }
