@@ -46,6 +46,16 @@ class HomeController extends Controller
         endforeach;
 
 
+        $init = Carbon::parse($user->created_at)->addDays(3);
+        $today = now();
+
+       if($user->status == "novo" and now() > $init):
+           User::where('id',$user->id)->update([
+               'status' => 'pendente'
+           ]);
+       $user->status = 'pendente';
+       endif;
+
         $data = [
             'user'          => $user,
             'chats'         => count($user->chats),

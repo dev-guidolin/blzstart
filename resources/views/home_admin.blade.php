@@ -15,9 +15,6 @@
         </div>
         <div class="col-sm-3">
             @if($user->status == 'novo')
-                @php
-
-                @endphp
                 <x-adminlte-alert theme="" icon="fas fa-lg fa-thumbs-up" title="Conta Teste" style="background: #ff7c7c; color: white">
                    Teste até dia {{ \Carbon\Carbon::parse($user->mensalidade)->format('d-m-Y H:i')  }}
                 </x-adminlte-alert>
