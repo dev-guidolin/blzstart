@@ -30,7 +30,7 @@ class AtualizarPagamentos extends Command
         $metodos = new Methods();
         $this->alert('Iniciando ciclo de verificação de cobranças.');
 
-        $cobrancas = Cobranca::where('status','pending')->get();
+        $cobrancas = Cobranca::where('status','pending')->where('collection_id','<>',null)->get();
 
         if(empty($cobrancas)) : return $this->info("Não há cobranças pendentes."); endif;
 
@@ -41,9 +41,10 @@ class AtualizarPagamentos extends Command
             $collection_id = $cobranca['collection_id'];
             $confirmarPagamento = ConfirmarPagamento::index($collection_id);
             $status = $confirmarPagamento->status();
-            $response = json_decode($confirmarPagamento->body());
+
 
             if($status == 200):
+                $response = json_decode($confirmarPagamento->body());
 
                 $planos = Planos::where('valor',$cobranca['valor'])->first();
                 $user = User::find($cobranca['user_id']);
@@ -58,14 +59,13 @@ class AtualizarPagamentos extends Command
                     User::where('id',$cobranca['user_id'])->update([
                         'mensalidade' => Carbon::parse($data)->addMonth($planos->validade)->format('Y-m-d H:i:s')
                     ]);
-
+                    $mensagem ="🤩 O pagamento de ".$cobranca['valor']." foi aprovado.";
+                    $metodos->enviarMensagem($mensagem, env('thiago_telegrgam_id'));
                 endif;
-                $mensagem ="O pagamento de ".$cobranca['valor']." foi aprovado.";
-                $metodos->enviarMensagem($mensagem, env('thiago_telegrgam_id'));
                 $this->info("Cobrança atualizada");
             else:
                 $this->warn("Erro na cobrança ".$cobranca['collection_id']);
-                $mensagem = "Erro na cobrança ".$cobranca['collection_id'];
+                $mensagem = "🚨 Erro na cobrança ".$cobranca['collection_id'];
                 $metodos->enviarMensagem($mensagem, env('thiago_telegrgam_id'));
             endif;
         endforeach;

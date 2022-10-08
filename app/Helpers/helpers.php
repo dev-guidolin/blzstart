@@ -52,7 +52,7 @@ function moneyReal($valor)
     return $retorno;
 }
 function alertaProprietarioTelegram($mensagem){
-    $chatid = '1091652075';
+
     $telegram = new Methods();
-    $telegram->enviarMensagem($mensagem,$chatid);
+    $telegram->enviarMensagem($mensagem,env('thiago_telegrgam_id'));
 }

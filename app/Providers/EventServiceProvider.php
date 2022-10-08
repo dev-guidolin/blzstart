@@ -26,6 +26,7 @@ class EventServiceProvider extends ServiceProvider
 
     protected $observers = [
         User::class => [NewUser::class],
+        Cobranca::class => [CobrancaObserver::class]
     ];
 
     /**

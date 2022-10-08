@@ -17,9 +17,14 @@ class Response extends Controller
 
         $dadosCobranca =Cobranca::where('preference_id',$request->preference_id)->first();
 
+        if(!$dadosCobranca):
+            return redirect()->to('/dashboard',302);
+        endif;
+
         $consultarPagamento = ConfirmarPagamento::index($request->collection_id);
 
         $body = json_decode($consultarPagamento->body());
+
 
         if($body->status !== $request->status or !$dadosCobranca):
             return view('pages.cobrancas.error');
