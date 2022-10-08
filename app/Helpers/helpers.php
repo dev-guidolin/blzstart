@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Telegram\Methods;
 use Psy\Exception\ErrorException;
 
 function mensalidadeEmDia($dataMensalidade)
@@ -49,5 +50,9 @@ function moneyReal($valor)
     $retorno = number_format($valor, 2, ",", ".");
 
     return $retorno;
-
+}
+function alertaProprietarioTelegram($mensagem){
+    $chatid = '1091652075';
+    $telegram = new Methods();
+    $telegram->enviarMensagem($mensagem,$chatid);
 }

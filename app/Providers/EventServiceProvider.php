@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Cobranca;
 use App\Models\User;
+use App\Observers\CobrancaObserver;
 use App\Observers\NewUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        User::observe(NewUser::class);
+        Cobranca::observe(CobrancaObserver::class);
     }
 }
